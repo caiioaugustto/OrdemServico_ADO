@@ -1,0 +1,39 @@
+﻿@model Entidades.Fornecedor
+
+@using (Html.BeginForm("Cadastrar", "Fornecedor", FormMethod.Post))
+{
+    <br />
+
+    @Html.LabelFor(a => a.Nome, "Nome*")
+    @Html.TextBoxFor(a => a.Nome, new { @class = "form-control" })
+    @Html.ValidationMessageFor(a => a.Nome)
+
+    <br />
+
+    @Html.LabelFor(a => a.Telefone, "Telefone*")
+    @Html.TextBoxFor(a => a.Telefone, new { @id = "Telefone", @class = "form-control" })
+    @Html.ValidationMessageFor(a => a.Telefone)
+
+    <br />
+
+    @Html.LabelFor(a => a.NomeResponsavel, "Nome Responsável*")
+    @Html.TextBoxFor(a => a.NomeResponsavel, new { @class = "form-control" })
+    @Html.ValidationMessageFor(a => a.NomeResponsavel)
+
+    <br />
+
+    @Html.LabelFor(a => a.Email, "Email*")
+    @Html.TextBoxFor(a => a.Email, new { @id = "telefone", placeholder = "teste@teste.com.br", @class = "form-control" })
+    @Html.ValidationMessageFor(a => a.Email)
+
+    <br />
+
+    @Html.LabelFor(a => a.Descricao, "Descrição*")
+    @Html.TextBoxFor(a => a.Descricao, new { @id = "telefone", placeholder = "DDD+Número (Ex: 11940028922)", @class = "form-control" })
+    @Html.ValidationMessageFor(a => a.Descricao)
+
+    <br />
+
+    <input type="submit" value="Cadastrar" />
+
+}
