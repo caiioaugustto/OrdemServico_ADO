@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace OrdemServico_ADO
+namespace Entidades
 {
     public enum Status
     {
-        Aberto,
-        Fechado,
-        Analise,
-        Cancelado
+        Aberto = 'A',
+        Fechado = 'F',
+        Analise = 'L',
+        Cancelado = 'C'
     }
 }

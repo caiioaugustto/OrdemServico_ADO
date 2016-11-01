@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel;
 
-namespace Enum
+namespace Entidades
 {
     public enum Prazo
     {
-        
+        [Description("5 Dias")]
+        CincoDias,
+        [Description("7 Dias")]
+        SeteDias,
+        [Description("Uma Semana")]
+        UmaSemana,
     }
 }

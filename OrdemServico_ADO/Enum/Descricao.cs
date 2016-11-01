@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 
-namespace OrdemServico_ADO.Enum
+namespace Entidades
 {
     public enum Descricao
     {
-        Pintura,
-        Limpeza, 
+        [Description("Pintura")]
+        Pintura = 'P',
+        [Description("Limpeza")]
+        Limpeza = 'L',
+        [Description("Troca de lâmpadas")]
+        TrocaDeLampada = 'T'
+
     }
 }

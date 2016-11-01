@@ -37,9 +37,9 @@
                 <td>@u.Solicitante</td>
                 <td>@u.Gerente</td>
                 <td>@u.Nucleo</td>
-                <td>@u.DataSolicitacao</td>
-                <td>@u.DataEnvio</td>
-                <td>@u.DataLiberacao</td>
+                <td>@u.DataSolicitacao.ToString("dd/MM/yyyy")</td>
+                <td>@u.DataEnvio.ToString("dd/MM/yyyy")</td>
+                <td>@u.DataLiberacao.ToString("dd/MM/yyyy")</td>
                 <td>@u.Prazo</td>
                 <td>@u.Status</td>
                 <td>@Html.ActionLink("Editar", "Editar", new { id = u.Id })</td>
