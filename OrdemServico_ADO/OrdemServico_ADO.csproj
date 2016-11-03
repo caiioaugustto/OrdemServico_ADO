@@ -171,8 +171,11 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\FornecedorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\OrdemServicoController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Entidades\Login.cs" />
+    <Compile Include="Entidades\LoginRepository.cs" />
     <Compile Include="Entidades\OrdemServico.cs" />
     <Compile Include="Entidades\ConnectionContext.cs" />
     <Compile Include="Entidades\Fornecedor.cs" />
@@ -191,6 +194,8 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Uteis\Criptografia.cs" />
+    <Compile Include="Uteis\SessionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -230,6 +235,7 @@
     <Content Include="Views\Fornecedor\PreencherCadastro.cshtml" />
     <Content Include="Views\OrdemServico\Index.cshtml" />
     <Content Include="Views\OrdemServico\PreencherOrdemServico.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

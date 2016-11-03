@@ -34,10 +34,10 @@ namespace Controllers
             Index();
         }
 
-        public void Editar(int id)
-        {
-            OrdemRepo.Editar(id);
-        }
+        //public void Editar(int id)
+        //{
+        //    OrdemRepo.Editar(id);
+        //}
 
         public void Excluir(int id)
         {

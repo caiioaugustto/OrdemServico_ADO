@@ -3,7 +3,7 @@
 <br />
 <br />
 
-<button class="btn btn-info" onclick="Cadastrar();">Cadastrar Fornecedor</button>
+<button class="btn btn-info" onclick="Cadastrar();">Cadastrar</button>
 
 <br />
 <br />
@@ -30,6 +30,7 @@
                 <td>@u.Descricao</td>
                 <td>@Html.ActionLink("Editar", "Editar", new { id = u.Id })</td>
                 <td>@Html.ActionLink("Excluir", "Excluir", new { id = u.Id })</td>
+                <td>@Html.ActionLink("Desativar", "Desativar", new { id = u.Id })</td>
             </tr>
         }
     </tbody>

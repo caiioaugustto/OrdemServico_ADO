@@ -3,7 +3,7 @@
 <br />
 <br />
 
-<button class="btn btn-info" onclick="Cadastrar();">Cadastrar OS</button>
+<button class="btn btn-info" onclick="Cadastrar();">Cadastrar </button>
 
 <br />
 <br />
@@ -44,6 +44,7 @@
                 <td>@u.Status</td>
                 <td>@Html.ActionLink("Editar", "Editar", new { id = u.Id })</td>
                 <td>@Html.ActionLink("Excluir", "Excluir", new { id = u.Id })</td>
+                <td>@Html.ActionLink("Desativar", "Desativar", new { id = u.Id })</td>
             </tr>
         }
     </tbody>
