@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Uteis;
 
 namespace Controllers
 {
+    [AutorizacaoFilter]
     public class OrdemServicoController : Controller
     {
         OrdemServicoRepository OrdemRepo = new OrdemServicoRepository();
@@ -15,42 +17,20 @@ namespace Controllers
         // GET: OrdemServico
         public ActionResult Index()
         {
-            if(Uteis.SessionManager.IsAuthenticated)
-            {
-                IList<OrdemServico> listarOS = OrdemRepo.Listar();
-                return View(listarOS);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Login");
-            }
+            IList<OrdemServico> listarOS = OrdemRepo.Listar();
+            return View(listarOS);
         }
 
         public ActionResult PreencherOrdemServico()
         {
-            if(Uteis.SessionManager.IsAuthenticated)
-            {
-                ViewBag.Fornecedor = fornRepo.Listar();
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Index", "Login");
-            }
+            ViewBag.Fornecedor = fornRepo.Listar();
+            return View();
         }
 
         public ActionResult Cadastrar(OrdemServico ordemServico)
         {
-            if(Uteis.SessionManager.IsAuthenticated)
-            {
-                OrdemRepo.Cadastrar(ordemServico);
-
-                return RedirectToAction("Index", "OrdemServico");
-            }
-            else
-            {
-                return RedirectToAction("Index", "Login");
-            }
+            OrdemRepo.Cadastrar(ordemServico);
+            return RedirectToAction("Index", "OrdemServico");
         }
 
         //public void Editar(int id)

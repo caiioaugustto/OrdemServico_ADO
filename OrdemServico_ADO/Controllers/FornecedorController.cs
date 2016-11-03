@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Uteis;
 
 namespace Controllers
 {
+    [AutorizacaoFilter]
     public class FornecedorController : Controller
     {
         FornecedorRepository fornRepo = new FornecedorRepository();
@@ -14,44 +16,20 @@ namespace Controllers
         // GET: Fornecedor
         public ActionResult Index()
         {
-            if(Uteis.SessionManager.IsAuthenticated)
-            {
-                IList<Fornecedor> listarFornecedores = fornRepo.Listar();
-                return View(listarFornecedores);
-            }else
-            {
-                return RedirectToAction("Index", "Login");
-            }
-          
+            IList<Fornecedor> listarFornecedores = fornRepo.Listar();
+            return View(listarFornecedores);
         }
 
         public ActionResult PreencherCadastro()
         {
-            if (Uteis.SessionManager.IsAuthenticated)
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Index", "Login");
-            }
+            return View();
         }
 
         public ActionResult Cadastrar(Fornecedor fornecedor)
         {
-            if(Uteis.SessionManager.IsAuthenticated)
-            {
-                fornRepo.Cadastrar(fornecedor);
-
-                IList<Fornecedor> listarFornecedores = fornRepo.Listar();
-
-                return View("Index", listarFornecedores);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Login");
-            }
-           
+            fornRepo.Cadastrar(fornecedor);
+            IList<Fornecedor> listarFornecedores = fornRepo.Listar();
+            return View("Index", listarFornecedores);
         }
     }
 }
