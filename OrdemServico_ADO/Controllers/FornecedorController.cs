@@ -14,22 +14,44 @@ namespace Controllers
         // GET: Fornecedor
         public ActionResult Index()
         {
-            IList<Fornecedor> listarFornecedores = fornRepo.Listar();
-            return View(listarFornecedores);
+            if(Uteis.SessionManager.IsAuthenticated)
+            {
+                IList<Fornecedor> listarFornecedores = fornRepo.Listar();
+                return View(listarFornecedores);
+            }else
+            {
+                return RedirectToAction("Index", "Login");
+            }
+          
         }
 
         public ActionResult PreencherCadastro()
         {
-            return View();
+            if (Uteis.SessionManager.IsAuthenticated)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Login");
+            }
         }
 
         public ActionResult Cadastrar(Fornecedor fornecedor)
         {
-            fornRepo.Cadastrar(fornecedor);
+            if(Uteis.SessionManager.IsAuthenticated)
+            {
+                fornRepo.Cadastrar(fornecedor);
 
-            IList<Fornecedor> listarFornecedores = fornRepo.Listar();
+                IList<Fornecedor> listarFornecedores = fornRepo.Listar();
 
-            return View("Index", listarFornecedores);
+                return View("Index", listarFornecedores);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Login");
+            }
+           
         }
     }
 }

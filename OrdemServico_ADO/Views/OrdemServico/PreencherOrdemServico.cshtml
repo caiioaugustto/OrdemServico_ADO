@@ -42,10 +42,6 @@
 
     <br />
 
-    @*@Html.LabelFor(a => a.Prazo, "Prazo*")
-    @Html.TextBoxFor(a => a.Prazo, new { @class = "form-control" })
-    @Html.ValidationMessageFor(a => a.Prazo)*@
-
     @Html.LabelFor(u => u.Prazo, "Prazo*")
     @Html.EnumDropDownListFor(m => m.Prazo, "Selecione", new { @class = "form-control" })
     @Html.ValidationMessageFor(u => u.Prazo)
@@ -58,19 +54,11 @@
 
     <br />
 
-    @*@Html.LabelFor(a => a.Status, "Status*")
-    @Html.TextBoxFor(a => a.Status, new { @class = "form-control" })
-    @Html.ValidationMessageFor(a => a.Status)*@
-
     @Html.LabelFor(u => u.Status, "Status*")
     @Html.EnumDropDownListFor(m => m.Status, "Selecione", new { @class = "form-control" })
     @Html.ValidationMessageFor(u => u.Status)
 
     <br />
-
-    @*@Html.LabelFor(a => a.DescricaoServico, "Descrição do Servico*")
-    @Html.TextBoxFor(a => a.DescricaoServico, new { @class = "form-control" })
-    @Html.ValidationMessageFor(a => a.DescricaoServico)*@
 
     @Html.LabelFor(u => u.DescricaoServico, "Descrição do Servico*")
     @Html.EnumDropDownListFor(m => m.DescricaoServico, "Selecione", new { @class = "form-control" })

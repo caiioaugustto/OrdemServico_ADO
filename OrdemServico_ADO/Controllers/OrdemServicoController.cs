@@ -15,23 +15,42 @@ namespace Controllers
         // GET: OrdemServico
         public ActionResult Index()
         {
-            IList<OrdemServico> listarOS = OrdemRepo.Listar();
-
-            return View(listarOS);
+            if(Uteis.SessionManager.IsAuthenticated)
+            {
+                IList<OrdemServico> listarOS = OrdemRepo.Listar();
+                return View(listarOS);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Login");
+            }
         }
 
         public ActionResult PreencherOrdemServico()
         {
-            ViewBag.Fornecedor = fornRepo.Listar();
-
-            return View();
+            if(Uteis.SessionManager.IsAuthenticated)
+            {
+                ViewBag.Fornecedor = fornRepo.Listar();
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Login");
+            }
         }
 
-        public void Cadastrar(OrdemServico ordemServico)
+        public ActionResult Cadastrar(OrdemServico ordemServico)
         {
-            OrdemRepo.Cadastrar(ordemServico);
+            if(Uteis.SessionManager.IsAuthenticated)
+            {
+                OrdemRepo.Cadastrar(ordemServico);
 
-            Index();
+                return RedirectToAction("Index", "OrdemServico");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Login");
+            }
         }
 
         //public void Editar(int id)

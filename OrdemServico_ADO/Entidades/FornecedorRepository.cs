@@ -26,7 +26,7 @@ namespace Entidades
 
                     //Parametros do Insert do SqlCommand
                     //SqlDbType Inicializa uma nova instância da classe de SqlParameter que usa o nome do parâmetro e o tipo de dados.
-                    cmdSql.Parameters.Add("@Nome", SqlDbType.VarChar, 50).Value = fornecedor.Nome ;
+                    cmdSql.Parameters.Add("@Nome", SqlDbType.VarChar, 50).Value = fornecedor.Nome;
                     cmdSql.Parameters.Add("@Telefone", SqlDbType.VarChar, 10).Value = fornecedor.Telefone;
                     cmdSql.Parameters.Add("@NomeResponsavel", SqlDbType.VarChar, 25).Value = fornecedor.NomeResponsavel;
                     cmdSql.Parameters.Add("@Email", SqlDbType.VarChar, 30).Value = fornecedor.Email;
