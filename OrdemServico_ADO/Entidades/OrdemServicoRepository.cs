@@ -147,8 +147,8 @@ namespace Entidades
 
                         os.Gerente = (String)sdr["Gerente"];
                         os.Nucleo = (String)sdr["Nucleo"];
-                        os.Prazo = Convert.ToDateTime("Prazo");
-                        os.DataLiberacao = Convert.ToDateTime("DataLiberacao");
+                        os.Prazo = Convert.ToDateTime(sdr["Prazo"]);
+                        os.DataLiberacao = Convert.ToDateTime(sdr["DataLiberacao"]);
                         os.Status = (Status)Enum.Parse(typeof(Status), myStatus, true);
                         os.DescricaoServico = (Descricao)Enum.Parse(typeof(Descricao), myDescription, true);
                     }

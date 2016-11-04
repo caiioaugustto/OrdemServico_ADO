@@ -36,7 +36,7 @@ namespace Controllers
         public ActionResult Editar(int id)
         {
             var os = OrdemRepo.PegarFornecedor(id);
-            return View();
+            return View(os);
         }
 
         public ActionResult SalvarEdicao(OrdemServico os)
