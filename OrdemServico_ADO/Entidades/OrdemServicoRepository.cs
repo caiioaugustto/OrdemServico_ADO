@@ -34,7 +34,7 @@ namespace Entidades
                     cmdSql.Parameters.Add("@Gerente", SqlDbType.VarChar, 30).Value = os.Gerente;
                     cmdSql.Parameters.Add("@Nucleo", SqlDbType.VarChar, 10).Value = os.Nucleo;
                     cmdSql.Parameters.Add("@DataEnvio", SqlDbType.DateTime).Value = DateTime.Today;
-                    cmdSql.Parameters.Add("@Prazo", SqlDbType.VarChar, 10).Value = os.Prazo;
+                    cmdSql.Parameters.Add("@Prazo", SqlDbType.DateTime).Value = os.Prazo;
                     cmdSql.Parameters.Add("@DataLiberacao", SqlDbType.DateTime).Value = os.DataLiberacao;
                     cmdSql.Parameters.Add("@Status", SqlDbType.VarChar, 10).Value = os.Status;
                     cmdSql.Parameters.Add("@DescricaoServico", SqlDbType.VarChar, 50).Value = os.DescricaoServico;
@@ -70,6 +70,9 @@ namespace Entidades
                     {
                         var os = new OrdemServico();
 
+                        string myDescription = dr["DescricaoServico"].ToString();
+                        string myStatus = dr["Status"].ToString();
+
                         os.Id = Convert.ToInt16(dr["Id"]);
                         os.Fornecedor.Nome = dr["NomeFornecedor"].ToString();
                         os.DataSolicitacao = Convert.ToDateTime(dr["DataSolicitacao"]);
@@ -78,10 +81,11 @@ namespace Entidades
                         os.Gerente = dr["Gerente"].ToString();
                         os.Nucleo = dr["Nucleo"].ToString();
                         os.DataEnvio = Convert.ToDateTime(dr["DataEnvio"]);
-                        //os.Prazo = Convert.ToString(dr["Prazo"]);
+                        os.Prazo = Convert.ToDateTime(dr["Prazo"]);
                         os.DataLiberacao = Convert.ToDateTime(dr["DataLiberacao"]);
-                        //os.Status = dr["Status"].ToString();
-                        //os.DescricaoServico = dr["DescricaoServico"].ToString();
+                        os.Solicitante = Convert.ToString(dr["Solicitante"]);
+                        os.Status = (Status)Enum.Parse(typeof(Status), myStatus, true);
+                        os.DescricaoServico = (Descricao)Enum.Parse(typeof(Descricao), myDescription, true);
 
                         listarOrdens.Add(os);
                     }
@@ -120,6 +124,42 @@ namespace Entidades
             }
         }
 
+        public OrdemServico PegarFornecedor(int id)
+        {
+            //Using garante o dispose no final
+            using (SqlConnection connSql = new SqlConnection(connectionString))
+            {
+                SqlCommand cmdSql = new SqlCommand("Select * from Ordem where Id = @id; ", connSql);
+
+                //SqlDbType Inicializa uma nova instância da classe de SqlParameter que usa o nome do parâmetro e o tipo de dados.
+                cmdSql.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+
+                connSql.Open();
+
+                OrdemServico os = new OrdemServico();
+
+                using (SqlDataReader sdr = cmdSql.ExecuteReader())
+                {
+                    if (sdr.Read())
+                    {
+                        string myDescription = sdr["DescricaoServico"].ToString();
+                        string myStatus = sdr["Status"].ToString();
+
+                        os.Gerente = (String)sdr["Gerente"];
+                        os.Nucleo = (String)sdr["Nucleo"];
+                        os.Prazo = Convert.ToDateTime("Prazo");
+                        os.DataLiberacao = Convert.ToDateTime("DataLiberacao");
+                        os.Status = (Status)Enum.Parse(typeof(Status), myStatus, true);
+                        os.DescricaoServico = (Descricao)Enum.Parse(typeof(Descricao), myDescription, true);
+                    }
+                }
+
+                connSql.Close();
+
+                return os;
+            }
+        }
+
         public void Editar(OrdemServico os)
         {
             using (SqlConnection connSql = new SqlConnection(connectionString))
@@ -130,15 +170,16 @@ namespace Entidades
                     connSql.Open();
 
                     //Query que executará
-                    SqlCommand cmdSql = new SqlCommand("update Ordem set Nucleo = @Nucleo, Prazo = @Prazo, " +
-                    "DataLiberacao = @DataLiberacao, Status = @Status, DescricaoServico = @DescricaoServico " +
+                    SqlCommand cmdSql = new SqlCommand("update Ordem set Gerente = @Gerente, Nucleo = @Nucleo, " +
+                    "Prazo = @Prazo, Status = @Status, DataLiberacao = @DataLiberacao, DescricaoServico = @DescricaoServico " +
                          "where Id = @id", connSql);
 
                     //Parametros do Insert do SqlCommand
-                    cmdSql.Parameters.Add("@Id", SqlDbType.Int).Value = os.Id;
+                    cmdSql.Parameters.Add("@Gerente", SqlDbType.Int).Value = os.Gerente;
                     cmdSql.Parameters.Add("@Nucleo", SqlDbType.VarChar, 30).Value = os.Nucleo;
-                    cmdSql.Parameters.Add("@DataLiberacao", SqlDbType.DateTime).Value = os.DataLiberacao;
+                    cmdSql.Parameters.Add("@Prazo", SqlDbType.DateTime).Value = os.Prazo;
                     cmdSql.Parameters.Add("@Status", SqlDbType.VarChar).Value = os.Status;
+                    cmdSql.Parameters.Add("@DataLiberacao", SqlDbType.VarChar, 50).Value = os.DataLiberacao;
                     cmdSql.Parameters.Add("@DescricaoServico", SqlDbType.VarChar, 50).Value = os.DescricaoServico;
 
                     //Executa a Query

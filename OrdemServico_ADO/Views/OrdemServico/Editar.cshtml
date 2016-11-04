@@ -1,0 +1,52 @@
+﻿@model Entidades.OrdemServico
+
+@section Header{
+    @RenderSection("Index", required: true)
+}
+
+@using (Html.BeginForm("SalvarEdicao", "OrdemServico", FormMethod.Post))
+{
+    <br />
+
+    @Html.LabelFor(a => a.Gerente, "Gerente*")
+    @Html.TextBoxFor(a => a.Gerente, new { @class = "form-control" })
+    @Html.ValidationMessageFor(a => a.Gerente)
+
+    <br />
+
+    @Html.LabelFor(a => a.Nucleo, "Núcleo*")
+    @Html.TextBoxFor(a => a.Nucleo, new { @class = "form-control" })
+    @Html.ValidationMessageFor(a => a.Nucleo)
+
+    <br />
+
+    <form>
+        <label for="data">Prazo*</label>
+        <input id="data" type="date" class="form-control" value="" />
+    </form>
+
+    <br />
+
+    <form>
+        <label for="data">Data de Liberação*</label>
+        <input id="data" type="date" class="form-control" value="" />
+    </form>
+
+    <br />
+
+    @Html.LabelFor(u => u.Status, "Status*")
+    @Html.EnumDropDownListFor(m => m.Status, "Selecione", new { @class = "form-control" })
+    @Html.ValidationMessageFor(u => u.Status)
+
+    <br />
+
+    @Html.LabelFor(u => u.DescricaoServico, "Descrição do Servico*")
+    @Html.EnumDropDownListFor(m => m.DescricaoServico, "Selecione", new { @class = "form-control" })
+    @Html.ValidationMessageFor(u => u.DescricaoServico)
+
+    <br />
+    
+    <input type="submit" value="Salvar" />
+
+}
+

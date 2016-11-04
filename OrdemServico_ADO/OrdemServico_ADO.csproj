@@ -181,7 +181,6 @@
     <Compile Include="Entidades\Fornecedor.cs" />
     <Compile Include="Entidades\OrdemServicoRepository.cs" />
     <Compile Include="Enum\Descricao.cs" />
-    <Compile Include="Enum\Prazo.cs" />
     <Compile Include="Enum\Status.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -237,6 +236,8 @@
     <Content Include="Views\OrdemServico\Index.cshtml" />
     <Content Include="Views\OrdemServico\PreencherOrdemServico.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\OrdemServico\Editar.cshtml" />
+    <Content Include="Views\OrdemServico\script\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -40,7 +40,7 @@
                 <td>@u.DataSolicitacao.ToString("dd/MM/yyyy")</td>
                 <td>@u.DataEnvio.ToString("dd/MM/yyyy")</td>
                 <td>@u.DataLiberacao.ToString("dd/MM/yyyy")</td>
-                <td>@u.Prazo</td>
+                <td>@u.Prazo.ToString("dd/MM/yyyy")</td>
                 <td>@u.Status</td>
                 <td>@Html.ActionLink("Editar", "Editar", new { id = u.Id })</td>
                 <td>@Html.ActionLink("Excluir", "Excluir", new { id = u.Id })</td>

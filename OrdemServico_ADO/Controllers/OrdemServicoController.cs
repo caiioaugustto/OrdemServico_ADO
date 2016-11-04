@@ -27,20 +27,28 @@ namespace Controllers
             return View();
         }
 
-        public ActionResult Cadastrar(OrdemServico ordemServico)
+        public ActionResult Cadastrar(OrdemServico os)
         {
-            OrdemRepo.Cadastrar(ordemServico);
+            OrdemRepo.Cadastrar(os);
             return RedirectToAction("Index", "OrdemServico");
         }
 
-        //public void Editar(int id)
-        //{
-        //    OrdemRepo.Editar(id);
-        //}
+        public ActionResult Editar(int id)
+        {
+            var os = OrdemRepo.PegarFornecedor(id);
+            return View();
+        }
 
-        public void Excluir(int id)
+        public ActionResult SalvarEdicao(OrdemServico os)
+        {
+            OrdemRepo.Editar(os);
+            return RedirectToAction("Index", "OrdemServico");
+        }
+
+        public ActionResult Excluir(int id)
         {
             OrdemRepo.Exclur(id);
+            return RedirectToAction("Index", "OrdemServico");
         }
     }
 }

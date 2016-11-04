@@ -1,5 +1,9 @@
 ﻿@model Entidades.OrdemServico
 
+@section Scripts {
+    @Scripts.Render("~/script/Index")
+}
+
 @using (Html.BeginForm("Cadastrar", "OrdemServico", FormMethod.Post))
 {
     <br />
@@ -9,7 +13,7 @@
             new SelectList(ViewBag.Fornecedor, "Id", "Nome"), "Selecione",
             new { @class = "form-control" })
     @Html.ValidationMessageFor(m => m.IdFornecedor)
-    
+
     <br />
 
     @Html.LabelFor(a => a.NumeroOrdemServico, "Nº OS*")
@@ -42,15 +46,16 @@
 
     <br />
 
-    @Html.LabelFor(u => u.Prazo, "Prazo*")
-    @Html.EnumDropDownListFor(m => m.Prazo, "Selecione", new { @class = "form-control" })
-    @Html.ValidationMessageFor(u => u.Prazo)
+    @Html.LabelFor(a => a.Prazo, "Prazo*")
+    @Html.TextBoxFor(a => a.Prazo, new { @class = "form-control datepicker", placeholder = "Coloque uma data" })
+    @Html.ValidationMessageFor(a => a.Prazo)
 
     <br />
 
-    @Html.LabelFor(a => a.DataLiberacao, "Data de Liberação*")
-    @Html.TextBoxFor(a => a.DataLiberacao, new { @class = "form-control" })
-    @Html.ValidationMessageFor(a => a.DataLiberacao)
+    <form>
+        <label for="data">Data de Liberação*</label>
+        <input id="data" type="date" class="form-control" value="" />
+    </form>
 
     <br />
 
@@ -65,7 +70,7 @@
     @Html.ValidationMessageFor(u => u.DescricaoServico)
 
     <br />
-    
+
     <input type="submit" value="Cadastrar" />
 
 }
