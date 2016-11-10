@@ -10,6 +10,12 @@
 
     <br />
 
+    @Html.LabelFor(a => a.NumeroFornecedor, "Nº Fornecedor*")
+    @Html.TextBoxFor(a => a.NumeroFornecedor, new { @class = "form-control" })
+    @Html.ValidationMessageFor(a => a.NumeroFornecedor)
+
+    <br />
+
     @Html.LabelFor(a => a.Telefone, "Telefone*")
     @Html.TextBoxFor(a => a.Telefone, new { @id = "Telefone", @class = "form-control" })
     @Html.ValidationMessageFor(a => a.Telefone)

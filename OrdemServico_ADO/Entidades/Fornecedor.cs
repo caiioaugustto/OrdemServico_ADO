@@ -9,6 +9,8 @@ namespace Entidades
 
         public string Nome { get; set; }
 
+        public int NumeroFornecedor { get; set; }
+
         public string Telefone { get; set; }
 
         public string NomeResponsavel { get; set; }

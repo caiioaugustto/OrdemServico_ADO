@@ -18,9 +18,6 @@ namespace Entidades
         public string NumeroOrdemServico { get; set; }
 
         [Required(ErrorMessage = "O campo abaixo é um campo Obrigatório")]
-        public int NumeroCondominio { get; set; }
-
-        [Required(ErrorMessage = "O campo abaixo é um campo Obrigatório")]
         [StringLength(30, MinimumLength = 3)]
         public string Solicitante { get; set; }
 
@@ -28,8 +25,6 @@ namespace Entidades
         [StringLength(30, MinimumLength = 3)]
         public string Gerente { get; set; }
 
-        [Required(ErrorMessage = "O campo abaixo é um campo Obrigatório")]
-        [StringLength(30, MinimumLength = 3)]
         public string Nucleo { get; set; }
 
         public DateTime DataEnvio { get; set; }

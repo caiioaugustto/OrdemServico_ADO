@@ -20,7 +20,7 @@ namespace Entidades
                     connSql.Open();
 
                     //Query que executará
-                    SqlCommand cmdSql = new SqlCommand("Insert Into Ordem(DataSolicitacao, NumeroOrdemServico, NumeroCondominio, " +
+                    SqlCommand cmdSql = new SqlCommand("Insert Into Ordem(DataSolicitacao, NumeroOrdemServico, " +
                     "Solicitante, Gerente, Nucleo, DataEnvio, Prazo, DataLiberacao, Status, DescricaoServico, IdFornecedor) " +
                         "Values (@DataSolicitacao, @NumeroOrdemServico, @NumeroCondominio, @Solicitante, @Gerente, @Nucleo, @DataEnvio, @Prazo, @DataLiberacao, @Status, @DescricaoServico, @IdFornecedor)", connSql);
 
@@ -29,7 +29,6 @@ namespace Entidades
                     cmdSql.Parameters.Add("@IdFornecedor", SqlDbType.Int).Value = os.IdFornecedor;
                     cmdSql.Parameters.Add("@DataSolicitacao", SqlDbType.DateTime).Value = DateTime.Today;
                     cmdSql.Parameters.Add("@NumeroOrdemServico", SqlDbType.VarChar, 20).Value = os.NumeroOrdemServico;
-                    cmdSql.Parameters.Add("@NumeroCondominio", SqlDbType.Int).Value = os.NumeroCondominio;
                     cmdSql.Parameters.Add("@Solicitante", SqlDbType.VarChar, 30).Value = os.Solicitante;
                     cmdSql.Parameters.Add("@Gerente", SqlDbType.VarChar, 30).Value = os.Gerente;
                     cmdSql.Parameters.Add("@Nucleo", SqlDbType.VarChar, 10).Value = os.Nucleo;
@@ -58,7 +57,7 @@ namespace Entidades
             {
                 connSql.Open();
 
-                SqlCommand cmdSql = new SqlCommand("Select Ordem.Id, Ordem.DataSolicitacao, Ordem.NumeroOrdemServico, Ordem.NumeroCondominio, " +
+                SqlCommand cmdSql = new SqlCommand("Select Ordem.Id, Ordem.DataSolicitacao, Ordem.NumeroOrdemServico, " +
                  "Ordem.Solicitante, Ordem.Gerente, Ordem.Nucleo, Ordem.DataEnvio, Ordem.Prazo, Ordem.DataLiberacao, Ordem.Status, Ordem.DescricaoServico, Fornecedor.Nome as NomeFornecedor " +
                      "From Ordem inner join Fornecedor on Fornecedor.Id = IdFornecedor order by Ordem.DataSolicitacao", connSql);
 
@@ -77,7 +76,6 @@ namespace Entidades
                         os.Fornecedor.Nome = dr["NomeFornecedor"].ToString();
                         os.DataSolicitacao = Convert.ToDateTime(dr["DataSolicitacao"]);
                         os.NumeroOrdemServico = Convert.ToString(dr["NumeroOrdemServico"]);
-                        os.NumeroCondominio = Convert.ToInt16(dr["NumeroCondominio"]);
                         os.Gerente = dr["Gerente"].ToString();
                         os.Nucleo = dr["Nucleo"].ToString();
                         os.DataEnvio = Convert.ToDateTime(dr["DataEnvio"]);
@@ -172,14 +170,15 @@ namespace Entidades
                     //Query que executará
                     SqlCommand cmdSql = new SqlCommand("update Ordem set Gerente = @Gerente, Nucleo = @Nucleo, " +
                     "Prazo = @Prazo, Status = @Status, DataLiberacao = @DataLiberacao, DescricaoServico = @DescricaoServico " +
-                         "where Id = @id", connSql);
+                         "where Id = @Id", connSql);
 
                     //Parametros do Insert do SqlCommand
+                    cmdSql.Parameters.Add("@Id", SqlDbType.Int).Value = os.Id;                    
                     cmdSql.Parameters.Add("@Gerente", SqlDbType.Int).Value = os.Gerente;
-                    cmdSql.Parameters.Add("@Nucleo", SqlDbType.VarChar, 30).Value = os.Nucleo;
+                    cmdSql.Parameters.Add("@Nucleo", SqlDbType.VarChar, 10).Value = os.Nucleo;
                     cmdSql.Parameters.Add("@Prazo", SqlDbType.DateTime).Value = os.Prazo;
-                    cmdSql.Parameters.Add("@Status", SqlDbType.VarChar).Value = os.Status;
-                    cmdSql.Parameters.Add("@DataLiberacao", SqlDbType.VarChar, 50).Value = os.DataLiberacao;
+                    cmdSql.Parameters.Add("@Status", SqlDbType.VarChar, 10).Value = os.Status;
+                    cmdSql.Parameters.Add("@DataLiberacao", SqlDbType.DateTime).Value = os.DataLiberacao;
                     cmdSql.Parameters.Add("@DescricaoServico", SqlDbType.VarChar, 50).Value = os.DescricaoServico;
 
                     //Executa a Query

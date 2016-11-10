@@ -1,12 +1,10 @@
 ﻿@model Entidades.OrdemServico
 
-@*@section Header{
-    @RenderSection("Index", required: true)
-}*@
-
 @using (Html.BeginForm("SalvarEdicao", "OrdemServico", FormMethod.Post))
 {
     <br />
+    
+    @Html.HiddenFor(u => u.Id, new { @class = "form-control" })
 
     @Html.LabelFor(a => a.Gerente, "Gerente*")
     @Html.TextBoxFor(a => a.Gerente, new { @class = "form-control" })
@@ -20,17 +18,15 @@
 
     <br />
 
-    <form>
-        <label for="data">Prazo*</label>
-        <input id="data" type="date" class="form-control" value="" />
-    </form>
+    @Html.LabelFor(a => a.Prazo, "Prazo*")
+    @Html.TextBoxFor(a => a.Prazo, new { @class = "form-control datepicker", placeholder = "Coloque uma data" })
+    @Html.ValidationMessageFor(a => a.Prazo)
 
     <br />
-
-    <form>
-        <label for="data">Data de Liberação*</label>
-        <input id="data" type="date" class="form-control" value="" />
-    </form>
+    
+    @Html.LabelFor(a => a.DataLiberacao, "Data de Liberação*")
+    @Html.TextBoxFor(a => a.DataLiberacao, new { @class = "form-control datepicker", placeholder = "Coloque uma data" })
+    @Html.ValidationMessageFor(a => a.DataLiberacao)
 
     <br />
 
@@ -45,7 +41,7 @@
     @Html.ValidationMessageFor(u => u.DescricaoServico)
 
     <br />
-    
+
     <input type="submit" value="Salvar" />
 
 }

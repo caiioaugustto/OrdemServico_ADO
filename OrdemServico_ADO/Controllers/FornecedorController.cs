@@ -31,5 +31,11 @@ namespace Controllers
             IList<Fornecedor> listarFornecedores = fornRepo.Listar();
             return View("Index", listarFornecedores);
         }
+
+        public ActionResult Excluir(int id)
+        {
+            fornRepo.Excluir(id);
+            return RedirectToAction("Index", "Fornecedor");
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Transactions;
 using System.Web;
 
 namespace Entidades
@@ -21,8 +22,8 @@ namespace Entidades
                     connSql.Open();
 
                     //Query que executará
-                    SqlCommand cmdSql = new SqlCommand("Insert Into Fornecedor(Nome, Telefone, NomeResponsavel, Email, Descricao) " +
-                        "Values (@Nome, @Telefone, @NomeResponsavel, @Email, @Descricao)", connSql);
+                    SqlCommand cmdSql = new SqlCommand("Insert Into Fornecedor(Nome, Telefone, NomeResponsavel, Email, Descricao, NumeroFornecedor) " +
+                        "Values (@Nome, @Telefone, @NomeResponsavel, @Email, @Descricao, @NumeroFornecedor)", connSql);
 
                     //Parametros do Insert do SqlCommand
                     //SqlDbType Inicializa uma nova instância da classe de SqlParameter que usa o nome do parâmetro e o tipo de dados.
@@ -31,6 +32,7 @@ namespace Entidades
                     cmdSql.Parameters.Add("@NomeResponsavel", SqlDbType.VarChar, 25).Value = fornecedor.NomeResponsavel;
                     cmdSql.Parameters.Add("@Email", SqlDbType.VarChar, 30).Value = fornecedor.Email;
                     cmdSql.Parameters.Add("@Descricao", SqlDbType.VarChar, 100).Value = fornecedor.Descricao;
+                    cmdSql.Parameters.Add("@NumeroFornecedor", SqlDbType.Int).Value = fornecedor.NumeroFornecedor;
 
                     //Executa a Query
                     cmdSql.ExecuteNonQuery();
@@ -51,7 +53,7 @@ namespace Entidades
             {
                 connSql.Open();
 
-                SqlCommand cmdSql = new SqlCommand("Select Fornecedor.Id, Fornecedor.Nome, Fornecedor.Telefone, Fornecedor.NomeResponsavel, Fornecedor.Email," +
+                SqlCommand cmdSql = new SqlCommand("Select Fornecedor.Id, Fornecedor.Nome, Fornecedor.Telefone, Fornecedor.NomeResponsavel, Fornecedor.Email, Fornecedor.NumeroFornecedor, " +
                 "Fornecedor.Descricao From Fornecedor order by Fornecedor.Nome", connSql);
 
                 List<Fornecedor> listarFornecedores = new List<Fornecedor>();
@@ -68,6 +70,7 @@ namespace Entidades
                         forn.NomeResponsavel = dr["NomeResponsavel"].ToString();
                         forn.Email = dr["Email"].ToString();
                         forn.Descricao = dr["Descricao"].ToString();
+                        forn.NumeroFornecedor = Convert.ToInt32(dr["NumeroFornecedor"]);
 
                         listarFornecedores.Add(forn);
                     }
@@ -75,6 +78,29 @@ namespace Entidades
                 connSql.Close();
 
                 return listarFornecedores;
+            }
+        }
+
+        public void Excluir(int id)
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                using (SqlConnection connSql = new SqlConnection(connectionString))
+                {
+                    connSql.Open();
+
+                    SqlCommand cmdSql = connSql.CreateCommand();
+
+                    cmdSql.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+
+                    cmdSql.CommandText = "delete from Ordem where IdFornecedor = @id";
+                    cmdSql.ExecuteNonQuery();
+
+                    cmdSql.CommandText = "delete from Fornecedor where Id = @id ";
+                    cmdSql.ExecuteNonQuery();
+                }
+
+                scope.Complete();
             }
         }
     }

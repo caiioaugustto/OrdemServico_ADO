@@ -1,9 +1,5 @@
 ﻿@model Entidades.OrdemServico
 
-@section Scripts {
-    @Scripts.Render("~/script/Index")
-}
-
 @using (Html.BeginForm("Cadastrar", "OrdemServico", FormMethod.Post))
 {
     <br />
@@ -19,12 +15,6 @@
     @Html.LabelFor(a => a.NumeroOrdemServico, "Nº OS*")
     @Html.TextBoxFor(a => a.NumeroOrdemServico, new { @class = "form-control" })
     @Html.ValidationMessageFor(a => a.NumeroOrdemServico)
-
-    <br />
-
-    @Html.LabelFor(a => a.NumeroCondominio, "Nº Condomínio*")
-    @Html.TextBoxFor(a => a.NumeroCondominio, new { @class = "form-control" })
-    @Html.ValidationMessageFor(a => a.NumeroCondominio)
 
     <br />
 
@@ -52,13 +42,6 @@
 
     <br />
 
-    <form>
-        <label for="data">Data de Liberação*</label>
-        <input id="data" type="date" class="form-control" value="" />
-    </form>
-
-    <br />
-
     @Html.LabelFor(u => u.Status, "Status*")
     @Html.EnumDropDownListFor(m => m.Status, "Selecione", new { @class = "form-control" })
     @Html.ValidationMessageFor(u => u.Status)
@@ -74,3 +57,6 @@
     <input type="submit" value="Cadastrar" />
 
 }
+
+
+@*@Html.TextBox("Prazo", DateTime.Today, new { @class = "datahorafinal", style = "width: 200px;" })*@
