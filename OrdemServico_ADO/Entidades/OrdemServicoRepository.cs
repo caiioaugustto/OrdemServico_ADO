@@ -122,7 +122,7 @@ namespace Entidades
             }
         }
 
-        public OrdemServico PegarFornecedor(int id)
+        public OrdemServico PegarOrdem(int id)
         {
             //Using garante o dispose no final
             using (SqlConnection connSql = new SqlConnection(connectionString))

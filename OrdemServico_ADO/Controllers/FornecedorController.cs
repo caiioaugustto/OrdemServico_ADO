@@ -32,6 +32,18 @@ namespace Controllers
             return View("Index", listarFornecedores);
         }
 
+        public ActionResult Editar(int id)
+        {
+            var fornecedor = fornRepo.PegarFornecedor(id);
+            return View(fornecedor);
+        }
+
+        public ActionResult SalvarEdicao(Fornecedor fornecedor)
+        {
+            fornRepo.Editar(fornecedor);
+            return RedirectToAction("Index", "Fornecedor");
+        }
+
         public ActionResult Excluir(int id)
         {
             fornRepo.Excluir(id);

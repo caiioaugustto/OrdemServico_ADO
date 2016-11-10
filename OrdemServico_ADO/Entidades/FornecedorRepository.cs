@@ -103,5 +103,70 @@ namespace Entidades
                 scope.Complete();
             }
         }
+
+        public Fornecedor PegarFornecedor(int id)
+        {
+            //Using garante o dispose no final
+            using (SqlConnection connSql = new SqlConnection(connectionString))
+            {
+                SqlCommand cmdSql = new SqlCommand("Select * from Fornecedor where Id = @id; ", connSql);
+
+                //SqlDbType Inicializa uma nova instância da classe de SqlParameter que usa o nome do parâmetro e o tipo de dados.
+                cmdSql.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+
+                connSql.Open();
+
+                Fornecedor fornecedor = new Fornecedor();
+
+                using (SqlDataReader sdr = cmdSql.ExecuteReader())
+                {
+                    if (sdr.Read())
+                    {
+                        fornecedor.Telefone = (String)sdr["Telefone"];
+                        fornecedor.NomeResponsavel = (String)sdr["NomeResponsavel"];
+                        fornecedor.Email = (String)sdr["Email"];
+                        fornecedor.Descricao = (String)sdr["Descricao"];
+                    }
+                }
+
+                connSql.Close();
+
+                return fornecedor;
+            }
+        }
+
+        public void Editar(Fornecedor fornecedor)
+        {
+            using (SqlConnection connSql = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    //Abre a conexão com o Banco
+                    connSql.Open();
+
+                    //Query que executará
+                    SqlCommand cmdSql = new SqlCommand("update Fornecedor set Telefone = @Telefone, NomeResponsavel = @NomeResponsavel, " +
+                    "Email = @Email, Descricao = @Descricao " +
+                         "where Id = @Id", connSql);
+
+                    //Parametros do Insert do SqlCommand
+                    cmdSql.Parameters.Add("@Id", SqlDbType.Int).Value = fornecedor.Id;
+                    cmdSql.Parameters.Add("@Telefone", SqlDbType.VarChar, 10).Value = fornecedor.Telefone;
+                    cmdSql.Parameters.Add("@NomeResponsavel", SqlDbType.VarChar, 25).Value = fornecedor.NomeResponsavel;
+                    cmdSql.Parameters.Add("@Email", SqlDbType.VarChar, 30).Value = fornecedor.Email;
+                    cmdSql.Parameters.Add("@Descricao", SqlDbType.VarChar, 100).Value = fornecedor.Descricao;
+
+                    //Executa a Query
+                    cmdSql.ExecuteNonQuery();
+
+                    //Encerra a conexão com o Banco
+                    connSql.Close();
+                }
+                catch
+                {
+                    connSql.Close();
+                }
+            }
+        }
     }
 }

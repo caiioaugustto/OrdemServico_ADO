@@ -239,6 +239,7 @@
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\OrdemServico\Editar.cshtml" />
     <Content Include="Views\OrdemServico\script\Index.cshtml" />
+    <Content Include="Views\Fornecedor\Editar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
