@@ -174,7 +174,7 @@ namespace Entidades
 
                     //Parametros do Insert do SqlCommand
                     cmdSql.Parameters.Add("@Id", SqlDbType.Int).Value = os.Id;                    
-                    cmdSql.Parameters.Add("@Gerente", SqlDbType.Int).Value = os.Gerente;
+                    cmdSql.Parameters.Add("@Gerente", SqlDbType.VarChar, 30).Value = os.Gerente;
                     cmdSql.Parameters.Add("@Nucleo", SqlDbType.VarChar, 10).Value = os.Nucleo;
                     cmdSql.Parameters.Add("@Prazo", SqlDbType.DateTime).Value = os.Prazo;
                     cmdSql.Parameters.Add("@Status", SqlDbType.VarChar, 10).Value = os.Status;
