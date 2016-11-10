@@ -22,7 +22,7 @@ namespace Entidades
                     //Query que executará
                     SqlCommand cmdSql = new SqlCommand("Insert Into Ordem(DataSolicitacao, NumeroOrdemServico, " +
                     "Solicitante, Gerente, Nucleo, DataEnvio, Prazo, DataLiberacao, Status, DescricaoServico, IdFornecedor) " +
-                        "Values (@DataSolicitacao, @NumeroOrdemServico, @NumeroCondominio, @Solicitante, @Gerente, @Nucleo, @DataEnvio, @Prazo, @DataLiberacao, @Status, @DescricaoServico, @IdFornecedor)", connSql);
+                        "Values (@DataSolicitacao, @NumeroOrdemServico, @Solicitante, @Gerente, @Nucleo, @DataEnvio, @Prazo, @DataLiberacao, @Status, @DescricaoServico, @IdFornecedor)", connSql);
 
                     //Parametros do Insert do SqlCommand
                     //SqlDbType Inicializa uma nova instância da classe de SqlParameter que usa o nome do parâmetro e o tipo de dados.

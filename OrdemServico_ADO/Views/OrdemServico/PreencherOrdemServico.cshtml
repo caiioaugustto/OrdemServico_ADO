@@ -42,6 +42,12 @@
 
     <br />
 
+    @Html.LabelFor(a => a.DataLiberacao, "Data Liberação*")
+    @Html.TextBoxFor(a => a.DataLiberacao, new { @class = "form-control datepicker", placeholder = "Coloque uma data" })
+    @Html.ValidationMessageFor(a => a.DataLiberacao)
+
+    <br />
+
     @Html.LabelFor(u => u.Status, "Status*")
     @Html.EnumDropDownListFor(m => m.Status, "Selecione", new { @class = "form-control" })
     @Html.ValidationMessageFor(u => u.Status)
