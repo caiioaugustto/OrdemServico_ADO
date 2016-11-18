@@ -15,11 +15,7 @@
             <th>Descrição do Serviço</th>
             <th>Nº OS</th>
             <th>Solicitante</th>
-            <th>Gerente</th>
-            <th>Núcleo</th>
             <th>Data de Solicitação</th>
-            <th>Data de Envio</th>
-            <th>Data de Liberação</th>
             <th>Prazo</th>
             <th>Status</th>
         </tr>
@@ -33,14 +29,10 @@
                 <td>@u.DescricaoServico</td>
                 <td>@u.NumeroOrdemServico</td>
                 <td>@u.Solicitante</td>
-                <td>@u.Gerente</td>
-                <td>@u.Nucleo</td>
                 <td>@u.DataSolicitacao.ToString("dd/MM/yyyy")</td>
-                <td>@u.DataEnvio.ToString("dd/MM/yyyy")</td>
-                <td>@u.DataLiberacao.ToString("dd/MM/yyyy")</td>
                 <td>@u.Prazo.ToString("dd/MM/yyyy")</td>
                 <td>@u.Status</td>
-                <td>@Html.ActionLink("Editar", "Editar", new { id = u.Id })</td>
+                <td>@Html.ActionLink("Detalhes", "Detalhes", new { id = u.Id })</td>
                 <td>@Html.ActionLink("Excluir", "Excluir", new { id = u.Id })</td>
                 <td>@Html.ActionLink("Desativar", "Desativar", new { id = u.Id })</td>
             </tr>

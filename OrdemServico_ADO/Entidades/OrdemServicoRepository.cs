@@ -58,7 +58,7 @@ namespace Entidades
                 connSql.Open();
 
                 SqlCommand cmdSql = new SqlCommand("Select Ordem.Id, Ordem.DataSolicitacao, Ordem.NumeroOrdemServico, " +
-                 "Ordem.Solicitante, Ordem.Gerente, Ordem.Nucleo, Ordem.DataEnvio, Ordem.Prazo, Ordem.DataLiberacao, Ordem.Status, Ordem.DescricaoServico, Fornecedor.Nome as NomeFornecedor " +
+                 "Ordem.Solicitante, Ordem.Prazo, Ordem.Status, Ordem.DescricaoServico, Fornecedor.Nome as NomeFornecedor " +
                      "From Ordem inner join Fornecedor on Fornecedor.Id = IdFornecedor order by Ordem.DataSolicitacao", connSql);
 
                 List<OrdemServico> listarOrdens = new List<OrdemServico>();
@@ -76,11 +76,7 @@ namespace Entidades
                         os.Fornecedor.Nome = dr["NomeFornecedor"].ToString();
                         os.DataSolicitacao = Convert.ToDateTime(dr["DataSolicitacao"]);
                         os.NumeroOrdemServico = Convert.ToString(dr["NumeroOrdemServico"]);
-                        os.Gerente = dr["Gerente"].ToString();
-                        os.Nucleo = dr["Nucleo"].ToString();
-                        os.DataEnvio = Convert.ToDateTime(dr["DataEnvio"]);
                         os.Prazo = Convert.ToDateTime(dr["Prazo"]);
-                        os.DataLiberacao = Convert.ToDateTime(dr["DataLiberacao"]);
                         os.Solicitante = Convert.ToString(dr["Solicitante"]);
                         os.Status = (Status)Enum.Parse(typeof(Status), myStatus, true);
                         os.DescricaoServico = (Descricao)Enum.Parse(typeof(Descricao), myDescription, true);
@@ -91,6 +87,52 @@ namespace Entidades
                 connSql.Close();
 
                 return listarOrdens;
+            }
+        }
+
+
+        public OrdemServico Detalhes(int id)
+        {
+            using (SqlConnection connSql = new SqlConnection(connectionString))
+            {
+
+                SqlCommand cmdSql = new SqlCommand("Select Ordem.Id, Ordem.DataSolicitacao, Ordem.NumeroOrdemServico, " +
+               "Ordem.Solicitante, Ordem.Gerente, Ordem.Nucleo, Ordem.DataEnvio, Ordem.Prazo, Ordem.DataLiberacao, Ordem.Status, Ordem.DescricaoServico, Fornecedor.Nome as NomeFornecedor " +
+                   "From Ordem inner join Fornecedor on Fornecedor.Id = IdFornecedor order by Ordem.DataSolicitacao", connSql);
+
+                //SqlDbType Inicializa uma nova instância da classe de SqlParameter que usa o nome do parâmetro e o tipo de dados.
+                cmdSql.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+
+                connSql.Open();
+
+                OrdemServico os = new OrdemServico();
+
+                using (SqlDataReader sdr = cmdSql.ExecuteReader())
+                {
+                    if (sdr.Read())
+                    {
+
+                        string myDescription = sdr["DescricaoServico"].ToString();
+                        string myStatus = sdr["Status"].ToString();
+
+                        os.Id = Convert.ToInt16(sdr["Id"]);
+                        os.Fornecedor.Nome = sdr["NomeFornecedor"].ToString();
+                        os.DataSolicitacao = Convert.ToDateTime(sdr["DataSolicitacao"]);
+                        os.NumeroOrdemServico = Convert.ToString(sdr["NumeroOrdemServico"]);
+                        os.Gerente = sdr["Gerente"].ToString();
+                        os.Nucleo = sdr["Nucleo"].ToString();
+                        os.DataEnvio = Convert.ToDateTime(sdr["DataEnvio"]);
+                        os.Prazo = Convert.ToDateTime(sdr["Prazo"]);
+                        os.DataLiberacao = Convert.ToDateTime(sdr["DataLiberacao"]);
+                        os.Solicitante = Convert.ToString(sdr["Solicitante"]);
+                        os.Status = (Status)Enum.Parse(typeof(Status), myStatus, true);
+                        os.DescricaoServico = (Descricao)Enum.Parse(typeof(Descricao), myDescription, true);
+                    }
+                }
+
+                connSql.Close();
+
+                return os;
             }
         }
 
@@ -173,7 +215,7 @@ namespace Entidades
                          "where Id = @Id", connSql);
 
                     //Parametros do Insert do SqlCommand
-                    cmdSql.Parameters.Add("@Id", SqlDbType.Int).Value = os.Id;                    
+                    cmdSql.Parameters.Add("@Id", SqlDbType.Int).Value = os.Id;
                     cmdSql.Parameters.Add("@Gerente", SqlDbType.VarChar, 30).Value = os.Gerente;
                     cmdSql.Parameters.Add("@Nucleo", SqlDbType.VarChar, 10).Value = os.Nucleo;
                     cmdSql.Parameters.Add("@Prazo", SqlDbType.DateTime).Value = os.Prazo;

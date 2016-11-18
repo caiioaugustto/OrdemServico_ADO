@@ -240,6 +240,7 @@
     <Content Include="Views\OrdemServico\Editar.cshtml" />
     <Content Include="Views\OrdemServico\script\Index.cshtml" />
     <Content Include="Views\Fornecedor\Editar.cshtml" />
+    <Content Include="Views\OrdemServico\Detalhes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

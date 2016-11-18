@@ -49,5 +49,11 @@ namespace Controllers
             fornRepo.Excluir(id);
             return RedirectToAction("Index", "Fornecedor");
         }
+
+        public ActionResult Buscar(string nome, string email)
+        {
+            var fornecedor = fornRepo.ListarFiltro(nome, email);
+            return RedirectToAction("Index", "Fornecedor", fornecedor);
+        }
     }
 }

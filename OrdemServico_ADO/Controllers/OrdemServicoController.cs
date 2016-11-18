@@ -24,7 +24,15 @@ namespace Controllers
         public ActionResult PreencherOrdemServico()
         {
             ViewBag.Fornecedor = fornRepo.Listar();
+            
             return View();
+        }
+
+        public ActionResult Detalhes(int id)
+        {
+            var detalhesOS = OrdemRepo.Detalhes(id);
+
+            return View(detalhesOS);
         }
 
         public ActionResult Cadastrar(OrdemServico os)

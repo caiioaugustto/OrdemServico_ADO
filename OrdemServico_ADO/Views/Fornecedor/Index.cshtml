@@ -3,6 +3,16 @@
 <br />
 <br />
 
+<div style="margin-top:30px; height:50px;">
+    @Html.Label("Nome: ")
+    @Html.TextBox("nome", "", new { id = "nome", style = "margin-bottom:40px;" })
+
+    @Html.Label("Email: ", new { style = "margin-bottom:40px;  padding-left: 10px;" })
+    @Html.TextBox("email", "", new { id = "email", style = "margin-bottom:40px; margin-right: 10px;" })
+
+    <button style="clear:both;" class="btn btn-info" onclick="Buscar();"> Buscar </button>
+</div>
+
 <button class="btn btn-info" onclick="Cadastrar();">Cadastrar</button>
 
 <br />
@@ -44,5 +54,23 @@
         function Cadastrar() {
             window.location.href = '@Url.Action("PreencherCadastro", "Fornecedor")';
         }
+
+        function Buscar() {
+            $.ajax({
+                url: '@Url.Action("Buscar", "Fornecedor")',
+                type: "post",
+                dataType: "html",
+                data: {
+                    nome: $('#nome').val(),
+                    email: $('#email').val()
+
+                },
+                success: function (data) {
+
+                    $("#mercadoriaTable").html(data);
+                }
+            });
+        }
+
     </script>
 }   

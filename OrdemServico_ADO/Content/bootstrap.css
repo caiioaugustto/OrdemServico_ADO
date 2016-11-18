@@ -614,9 +614,10 @@ dd {
     width: 160px;
     overflow: hidden;
     clear: left;
-    text-align: right;
+    /*text-align: right;*/
     text-overflow: ellipsis;
     white-space: nowrap;
+    padding-bottom: 10px;
   }
   .dl-horizontal dd {
     margin-left: 180px;

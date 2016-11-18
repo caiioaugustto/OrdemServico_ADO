@@ -29,5 +29,7 @@ namespace OrdemServico_ADO.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<Entidades.OrdemServico> OrdemServicoes { get; set; }
     }
 }

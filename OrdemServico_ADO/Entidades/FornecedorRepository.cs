@@ -168,5 +168,111 @@ namespace Entidades
                 }
             }
         }
+
+        public IList<Fornecedor> ListarFiltro(string nome, string email)
+        {
+            using (SqlConnection connSql = new SqlConnection(connectionString))
+            {
+                connSql.Open();
+
+                SqlCommand cmdSql = new SqlCommand();
+
+                if (nome == null || nome == "" && email == null || email == "")
+                    cmdSql = new SqlCommand("select * from Fornecedor", connSql);
+
+                else if (nome != null && email == null)
+                {
+                    cmdSql = new SqlCommand("Select Fornecedor.Id, Fornecedor.Nome, Fornecedor.Telefone, Fornecedor.NomeResponsavel, Fornecedor.Email, Fornecedor.NumeroFornecedor, " +
+                 "Fornecedor.Descricao From Fornecedor where Fornecedor.Nome = @nome order by Fornecedor.Nome", connSql);
+
+                    cmdSql.Parameters.Add("@Nome", SqlDbType.VarChar, 50).Value = nome;
+                }
+
+                else if (nome == null && email != null)
+                {
+                    cmdSql = new SqlCommand("Select Fornecedor.Id, Fornecedor.Nome, Fornecedor.Telefone, Fornecedor.NomeResponsavel, Fornecedor.Email, Fornecedor.NumeroFornecedor, " +
+                    "Fornecedor.Descricao From Fornecedor where Fornecedor.email = @email order by Fornecedor.Nome", connSql);
+                    
+                    cmdSql.Parameters.Add("@email", SqlDbType.VarChar, 30).Value = email;
+                }
+
+                else
+                {
+                    cmdSql = new SqlCommand("Select Fornecedor.Id, Fornecedor.Nome, Fornecedor.Telefone, Fornecedor.NomeResponsavel, Fornecedor.Email, Fornecedor.NumeroFornecedor, " +
+                    "Fornecedor.Descricao From Fornecedor where Fornecedor.Nome = @email and Fornecedor.Nome = @nome order by Fornecedor.Nome", connSql);
+                    
+                    cmdSql.Parameters.Add("@Nome", SqlDbType.VarChar, 50).Value = nome;
+                    cmdSql.Parameters.Add("@email", SqlDbType.VarChar, 30).Value = email;
+                }
+
+
+                List<Fornecedor> listarFornecedores = new List<Fornecedor>();
+
+                using (SqlDataReader dr = cmdSql.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        var forn = new Fornecedor();
+
+                        forn.Id = Convert.ToInt16(dr["Id"]);
+                        forn.Nome = dr["Nome"].ToString();
+                        forn.Telefone = dr["Telefone"].ToString();
+                        forn.NomeResponsavel = dr["NomeResponsavel"].ToString();
+                        forn.Email = dr["Email"].ToString();
+                        forn.Descricao = dr["Descricao"].ToString();
+                        forn.NumeroFornecedor = Convert.ToInt32(dr["NumeroFornecedor"]);
+
+                        listarFornecedores.Add(forn);
+                    }
+                }
+                connSql.Close();
+
+                return listarFornecedores;
+            }
+
+            //using (SqlConnection con = new SqlConnection(connections.StringConnection()))
+            //{
+            //    con.Open();
+
+            //    SqlCommand cmmd = new SqlCommand();
+
+            //    if (nome == null || nome == "")
+            //    {
+            //        cmmd = new SqlCommand("select * from Agentes", con);
+
+            //    }
+            //    else
+            //    {
+            //        cmmd = new SqlCommand("select*from Agentes where nome Like @Nome", con);
+            //        cmmd.Parameters.Add("@Nome", SqlDbType.VarChar, 50).Value = "%" + nome + "%";
+
+            //    }
+
+            //    List<Agente> lista = new List<Agente>();
+            //    Agente agente = null;
+
+            //    //ExecuteReader = executa declarações SQL que retornan linhas de dados, tais como no SELECT...
+            //    using (var listaSql = cmmd.ExecuteReader())
+            //    {
+            //        while (listaSql.Read())
+            //        {
+            //            agente = new Agente();
+            //            agente.id = (int)listaSql["id"];
+            //            agente.nome = listaSql["Nome"].ToString();
+            //            agente.nivel = listaSql["Nivel"].ToString();
+            //            agente.funcao = listaSql["Funcao"].ToString();
+            //            agente.inumano = listaSql["Inumano"].ToString();
+            //            agente.equipe = listaSql["Equipe"].ToString();
+            //            agente.poderes = listaSql["Poderes"].ToString();
+            //            agente.arquirrival = listaSql["Arquirrival"].ToString();
+            //            lista.Add(agente);
+
+            //        }
+
+            //        con.Close();
+            //        return lista;
+            //    }
+            //}
+        }
     }
 }

@@ -1,0 +1,110 @@
+﻿@model Entidades.OrdemServico
+
+@{
+    ViewBag.Title = "Detalhes";
+}
+
+<h2>Detalhes</h2>
+
+@Html.HiddenFor(u => u.Id, new { @class = "form-control" })
+
+<div>
+    <h4>Ordem de Servico</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Nome do Fornecedor:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fornecedor.Nome)
+        </dd>
+
+        <dt>
+            Nº OS:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumeroOrdemServico)
+        </dd>
+
+        <dt>
+            Data de Solicitação:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataSolicitacao)
+        </dd>
+
+        <dt>
+            Solicitante:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Solicitante)
+        </dd>
+
+        <dt>
+            Gerente:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gerente)
+        </dd>
+
+        <dt>
+            Núcleo
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nucleo)
+        </dd>
+
+        <dt>
+            Data de Envio:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataEnvio)
+        </dd>
+
+        <dt>
+            Data de Liberação
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataLiberacao)
+        </dd>
+
+        <dt>
+            Prazo:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Prazo)
+        </dd>
+
+        <dt>
+            Status Atual:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            Descrição:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DescricaoServico)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar OS", "Editar", new { id = Model.Id })
+</p>
+<p>
+    @Html.ActionLink("Voltar para Lista", "Index")
+</p>
