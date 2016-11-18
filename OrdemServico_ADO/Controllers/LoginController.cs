@@ -10,14 +10,20 @@ namespace Controllers
 {
     public class LoginController : Controller
     {
-        LoginRepository loginRepo = new LoginRepository();
+        private LoginRepository loginRepo;
+
+        public LoginController(LoginRepository loginRepo)
+        {
+            this.loginRepo = loginRepo;
+        }
+        
         // GET: Login
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult Logar(String usuario, String senha)
+        public ActionResult Logar(string usuario, string senha)
         {
             Login login = loginRepo.Buscar(usuario, senha);
 

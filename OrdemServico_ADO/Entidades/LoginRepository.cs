@@ -10,10 +10,17 @@ namespace Entidades
 {
     public class LoginRepository
     {
-        //public Login Buscar(string login, string senha)
+        private Context context;
+
+        public LoginRepository(Context context)
+        {
+            this.context = context;
+        }
+
+        //public Login Buscar(string usuario, string senha)
         //{
         //    string senhaCriptografada = Criptografia.CriptografaMd5(senha);
-        //    //var logar = context.LoginAdmin.Where(b => b.Usuario == login && b.Senha == senhaCriptografada).FirstOrDefault();
+        //    var logar = context.Login.Where(a => a.Usuario == usuario && a.Senha == senhaCriptografada).FirstOrDefault();
         //    return logar;
 
         //}
@@ -22,7 +29,7 @@ namespace Entidades
 
         public Login Buscar(string usuario, string senha)
         {
-            string senhaCriptografada = Criptografia.CriptografaMd5(senha); 
+            string senhaCriptografada = Criptografia.CriptografaMd5(senha);
 
             using (SqlConnection connSql = new SqlConnection(connectionString))
             {
