@@ -17,6 +17,9 @@ namespace Controllers
         public ActionResult Index()
         {
             IList<Fornecedor> listarFornecedores = fornRepo.Listar();
+
+            ViewBag.forn = listarFornecedores.OrderBy(a => a.Nome);
+
             return View(listarFornecedores);
         }
 
@@ -28,8 +31,11 @@ namespace Controllers
         public ActionResult Cadastrar(Fornecedor fornecedor)
         {
             fornRepo.Cadastrar(fornecedor);
-            IList<Fornecedor> listarFornecedores = fornRepo.Listar();
-            return View("Index", listarFornecedores);
+            //IList<Fornecedor> listarFornecedores = fornRepo.Listar();
+
+            return RedirectToAction("Index", "Fornecedor");
+
+            //return View("Index", listarFornecedores);
         }
 
         public ActionResult Editar(int id)

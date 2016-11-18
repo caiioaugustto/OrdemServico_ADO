@@ -177,10 +177,10 @@ namespace Entidades
 
                 SqlCommand cmdSql = new SqlCommand();
 
-                if (nome == null || nome == "" && email == null || email == "")
+                if (nome == "" && email == "")
                     cmdSql = new SqlCommand("select * from Fornecedor", connSql);
 
-                else if (nome != null && email == null)
+                else if (nome != "" && email == "")
                 {
                     cmdSql = new SqlCommand("Select Fornecedor.Id, Fornecedor.Nome, Fornecedor.Telefone, Fornecedor.NomeResponsavel, Fornecedor.Email, Fornecedor.NumeroFornecedor, " +
                  "Fornecedor.Descricao From Fornecedor where Fornecedor.Nome = @nome order by Fornecedor.Nome", connSql);
@@ -188,7 +188,7 @@ namespace Entidades
                     cmdSql.Parameters.Add("@Nome", SqlDbType.VarChar, 50).Value = nome;
                 }
 
-                else if (nome == null && email != null)
+                else if (nome == "" && email != "")
                 {
                     cmdSql = new SqlCommand("Select Fornecedor.Id, Fornecedor.Nome, Fornecedor.Telefone, Fornecedor.NomeResponsavel, Fornecedor.Email, Fornecedor.NumeroFornecedor, " +
                     "Fornecedor.Descricao From Fornecedor where Fornecedor.email = @email order by Fornecedor.Nome", connSql);
@@ -196,7 +196,7 @@ namespace Entidades
                     cmdSql.Parameters.Add("@email", SqlDbType.VarChar, 30).Value = email;
                 }
 
-                else
+                else if (nome != "" && email != "")
                 {
                     cmdSql = new SqlCommand("Select Fornecedor.Id, Fornecedor.Nome, Fornecedor.Telefone, Fornecedor.NomeResponsavel, Fornecedor.Email, Fornecedor.NumeroFornecedor, " +
                     "Fornecedor.Descricao From Fornecedor where Fornecedor.Nome = @email and Fornecedor.Nome = @nome order by Fornecedor.Nome", connSql);
@@ -204,8 +204,7 @@ namespace Entidades
                     cmdSql.Parameters.Add("@Nome", SqlDbType.VarChar, 50).Value = nome;
                     cmdSql.Parameters.Add("@email", SqlDbType.VarChar, 30).Value = email;
                 }
-
-
+                
                 List<Fornecedor> listarFornecedores = new List<Fornecedor>();
 
                 using (SqlDataReader dr = cmdSql.ExecuteReader())
