@@ -3,6 +3,12 @@
 <br />
 <br />
 
+<button class="btn btn-info" onclick="Cadastrar();">Cadastrar</button>
+
+<button class="btn btn-info" onclick="ExportarExcel();">Exportar</button>
+
+<br />
+
 <div style="margin-top:30px; height:50px;">
 
     @Html.Label("Nome: ")
@@ -14,9 +20,6 @@
     <button style="clear:both;" class="btn btn-info" onclick="Buscar();"> Buscar </button>
 </div>
 
-<button class="btn btn-info" onclick="Cadastrar();">Cadastrar</button>
-
-<br />
 <br />
 
 <table class="table table-hover">
@@ -52,25 +55,29 @@
 
 @section scripts{
     <script>
-        function Cadastrar() {
-            window.location.href = '@Url.Action("PreencherCadastro", "Fornecedor")';
+    function Cadastrar() {
+        window.location.href = '@Url.Action("PreencherCadastro", "Fornecedor")';
+        }
+
+        function ExportarExcel() {
+            window.location.href = '@Url.Action("Exportar", "Fornecedor")';
         }
 
         function Buscar() {
             $.ajax({
                 url: '@Url.Action("Buscar", "Fornecedor")',
-                type: "post",
-                dataType: "html",
-                data: {
-                    nome: $('#fltNome').val(),
-                    email: $('#fltEmail').val()
+            type: "post",
+            dataType: "html",
+            data: {
+                nome: $('#fltNome').val(),
+                email: $('#fltEmail').val()
 
-                },
-                success: function (data) {
-
-                }
-            });
-        }
+            },
+            success: function (data) {
+                
+            }
+        });
+    }
 
     </script>
 }   
