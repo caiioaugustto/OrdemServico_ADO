@@ -11,70 +11,53 @@
 
 <div style="margin-top:30px; height:50px;">
 
-    @Html.Label("Nome: ")
-    @Html.DropDownList("fltNome", new SelectList(ViewBag.forn, "Id", "Nome"), "Selecione", new { @class = "combobox filtro", style = "width: 130px" })
+    @*@Html.Label("Nome: ")
+    @Html.DropDownList("fltNome", new SelectList(ViewBag.forn, "Id", "Nome"), "Selecione", new { @class = "combobox filtro", style = "width: 130px" })*@
 
-    @Html.Label("E-mail: ")
-    @Html.DropDownList("fltEmail", new SelectList(ViewBag.forn, "Id", "Email"), "Selecione", new { @class = "combobox filtro", style = "width: 130px" })
+    @Html.Label("Nome: ")
 
     <button style="clear:both;" class="btn btn-info" onclick="Buscar();"> Buscar </button>
 </div>
 
 <br />
 
-<table class="table table-hover">
-    <thead>
-        <tr style="width:300px;">
-            <th>Nome</th>
-            <th>Nº Fornecedor</th>
-            <th>Telefone</th>
-            <th>Nome do Responsável</th>
-            <th>Email</th>
-            <th>Descrição</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @foreach (var u in Model)
-        {
-            <tr>
-                <td>@u.Nome</td>
-                <td>@u.NumeroFornecedor</td>
-                <td>@u.Telefone</td>
-                <td>@u.NomeResponsavel</td>
-                <td>@u.Email</td>
-                <td>@u.Descricao</td>
-                <td>@Html.ActionLink("Editar", "Editar", new { id = u.Id })</td>
-                <td>@Html.ActionLink("Excluir", "Excluir", new { id = u.Id })</td>
-                <td>@Html.ActionLink("Desativar", "Desativar", new { id = u.Id })</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div id="listaFornecedores">
+</div>
 
 
 @section scripts{
     <script>
+
     function Cadastrar() {
         window.location.href = '@Url.Action("PreencherCadastro", "Fornecedor")';
-        }
+    }
 
-        function ExportarExcel() {
-            window.location.href = '@Url.Action("Exportar", "Fornecedor")';
-        }
+    function ExportarExcel() {
 
-        function Buscar() {
-            $.ajax({
-                url: '@Url.Action("Buscar", "Fornecedor")',
+        $.ajax({
+            url: '@Url.Action("Exportar", "Fornecedor")',
             type: "post",
             dataType: "html",
             data: {
-                nome: $('#fltNome').val(),
-                email: $('#fltEmail').val()
+                nome: $('#fltNome').val()
+            },
+        });
+    }
 
+    function Buscar() {
+
+        $('#listaFornecedores').hide();
+
+        $.ajax({
+            url: '@Url.Action("Buscar", "Fornecedor")',
+            type: "post",
+            dataType: "html",
+            data: {
+                nome: $('#fltNome').val()
             },
             success: function (data) {
-                
+                $('#listaFornecedores').html(data);
+                $('#listaFornecedores').show();
             }
         });
     }

@@ -1,0 +1,31 @@
+﻿@model IList<Entidades.Fornecedor>
+
+<table class="table table-hover">
+    <thead>
+        <tr style="width:300px;">
+            <th>Nome</th>
+            <th>Nº Fornecedor</th>
+            <th>Telefone</th>
+            <th>Nome do Responsável</th>
+            <th>Email</th>
+            <th>Descrição</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.Nome</td>
+                <td>@u.NumeroFornecedor</td>
+                <td>@u.Telefone</td>
+                <td>@u.NomeResponsavel</td>
+                <td>@u.Email</td>
+                <td>@u.Descricao</td>
+                <td>@Html.ActionLink("Editar", "Editar", new { id = u.Id })</td>
+                <td>@Html.ActionLink("Excluir", "Excluir", new { id = u.Id })</td>
+                <td>@Html.ActionLink("Desativar", "Desativar", new { id = u.Id })</td>
+            </tr>
+        }
+    </tbody>
+</table>

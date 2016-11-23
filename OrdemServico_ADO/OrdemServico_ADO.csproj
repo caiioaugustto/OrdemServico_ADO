@@ -268,6 +268,7 @@
     <Content Include="Views\OrdemServico\script\Index.cshtml" />
     <Content Include="Views\Fornecedor\Editar.cshtml" />
     <Content Include="Views\OrdemServico\Detalhes.cshtml" />
+    <Content Include="Views\Fornecedor\partial\_Listar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

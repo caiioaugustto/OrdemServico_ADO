@@ -61,26 +61,22 @@ namespace Controllers
             return RedirectToAction("Index", "Fornecedor");
         }
 
-        public ActionResult Buscar(string nome, string email)
+        public ActionResult Buscar(string nome)
         {
-            var fornecedor = fornRepo.ListarFiltro(nome, email);
-            return RedirectToAction("Index", "Fornecedor", fornecedor);
+            var fornecedores = fornRepo.ListarFiltro(nome);
+            return PartialView("partial/_Listar", fornecedores);
         }
 
-        public ActionResult Exportar()
+        public ActionResult Exportar(string nome)
         {
-            IEnumerable<Fornecedor> fornecedores = fornRepo.Listar();
-
-            //fornecedores = AplicarFiltros(fornecedores, ddlLinha, ddlStatus, ddlStatusVaAtivo, txtNome).OrderBy(p => p.Nome);
+            IEnumerable<Fornecedor> fornecedores = fornRepo.ListarFiltro(nome);
 
             MemoryStream stream = new MemoryStream();
 
             using (ExcelPackage xlPackage = new ExcelPackage())
             {
-                ExcelWorksheet ws = xlPackage.Workbook.Worksheets.Add("Produtos");
+                ExcelWorksheet ws = xlPackage.Workbook.Worksheets.Add("Fornecedores");
                 var numeroLinha = 2;
-
-                //fornecedores = fornecedores.Where(p => p.ProdutoVas.Any(va => va.Status == (char)ProdutoVa.EnumStatus.Ativo));
 
                 ws.Cells[1, 1].Value = "Nome";
                 ws.Cells[1, 2].Value = "Nome Responsavel";

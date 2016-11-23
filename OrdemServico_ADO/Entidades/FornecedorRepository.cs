@@ -169,7 +169,7 @@ namespace Entidades
             }
         }
 
-        public IList<Fornecedor> ListarFiltro(string nome, string email)
+        public IList<Fornecedor> ListarFiltro(string nome)
         {
             using (SqlConnection connSql = new SqlConnection(connectionString))
             {
@@ -177,10 +177,10 @@ namespace Entidades
 
                 SqlCommand cmdSql = new SqlCommand();
 
-                if (nome == "" && email == "")
+                if (nome == "")
                     cmdSql = new SqlCommand("select * from Fornecedor", connSql);
 
-                else if (nome != "" && email == "")
+                else if (nome != "")
                 {
                     cmdSql = new SqlCommand("Select Fornecedor.Id, Fornecedor.Nome, Fornecedor.Telefone, Fornecedor.NomeResponsavel, Fornecedor.Email, Fornecedor.NumeroFornecedor, " +
                  "Fornecedor.Descricao From Fornecedor where Fornecedor.Nome = @nome order by Fornecedor.Nome", connSql);
@@ -188,23 +188,6 @@ namespace Entidades
                     cmdSql.Parameters.Add("@Nome", SqlDbType.VarChar, 50).Value = nome;
                 }
 
-                else if (nome == "" && email != "")
-                {
-                    cmdSql = new SqlCommand("Select Fornecedor.Id, Fornecedor.Nome, Fornecedor.Telefone, Fornecedor.NomeResponsavel, Fornecedor.Email, Fornecedor.NumeroFornecedor, " +
-                    "Fornecedor.Descricao From Fornecedor where Fornecedor.email = @email order by Fornecedor.Nome", connSql);
-                    
-                    cmdSql.Parameters.Add("@email", SqlDbType.VarChar, 30).Value = email;
-                }
-
-                else if (nome != "" && email != "")
-                {
-                    cmdSql = new SqlCommand("Select Fornecedor.Id, Fornecedor.Nome, Fornecedor.Telefone, Fornecedor.NomeResponsavel, Fornecedor.Email, Fornecedor.NumeroFornecedor, " +
-                    "Fornecedor.Descricao From Fornecedor where Fornecedor.Nome = @email and Fornecedor.Nome = @nome order by Fornecedor.Nome", connSql);
-                    
-                    cmdSql.Parameters.Add("@Nome", SqlDbType.VarChar, 50).Value = nome;
-                    cmdSql.Parameters.Add("@email", SqlDbType.VarChar, 30).Value = email;
-                }
-                
                 List<Fornecedor> listarFornecedores = new List<Fornecedor>();
 
                 using (SqlDataReader dr = cmdSql.ExecuteReader())
