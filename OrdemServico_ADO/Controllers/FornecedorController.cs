@@ -9,6 +9,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Uteis;
+using PagedList;
 
 
 namespace Controllers
@@ -21,11 +22,7 @@ namespace Controllers
         // GET: Fornecedor
         public ActionResult Index()
         {
-            IList<Fornecedor> listarFornecedores = fornRepo.Listar();
-
-            ViewBag.forn = listarFornecedores.OrderBy(a => a.Nome);
-
-            return View(listarFornecedores);
+            return View();
         }
 
         public ActionResult PreencherCadastro()
@@ -58,14 +55,21 @@ namespace Controllers
         public ActionResult Excluir(int id)
         {
             fornRepo.Excluir(id);
-            return RedirectToAction("Index", "Fornecedor");
+            return Content("ok");
         }
 
         public ActionResult Buscar(string nome)
         {
             var fornecedores = fornRepo.ListarFiltro(nome);
+
             return PartialView("partial/_Listar", fornecedores);
+
+            //int paginaNumero = (pagina ?? 1);
+            //int paginaTamanho = 20;
+
+            //return PartialView("partial/_Listar", fornecedores.ToPagedList(paginaNumero, paginaTamanho));
         }
+
 
         public ActionResult Exportar(string nome)
         {

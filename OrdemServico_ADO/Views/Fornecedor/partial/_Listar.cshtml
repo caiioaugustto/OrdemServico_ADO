@@ -23,7 +23,7 @@
                 <td>@u.Email</td>
                 <td>@u.Descricao</td>
                 <td>@Html.ActionLink("Editar", "Editar", new { id = u.Id })</td>
-                <td>@Html.ActionLink("Excluir", "Excluir", new { id = u.Id })</td>
+                <td><a href="javascript:ConfirmarExclusao(@u.Id)">Excluir</a></td>
                 <td>@Html.ActionLink("Desativar", "Desativar", new { id = u.Id })</td>
             </tr>
         }

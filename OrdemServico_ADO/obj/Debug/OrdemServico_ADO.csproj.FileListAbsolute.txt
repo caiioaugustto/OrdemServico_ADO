@@ -133,3 +133,7 @@ C:\Users\Estag2\Documents\Caio\OrdemServicoCond_ADO\OrdemServico_ADO\OrdemServic
 C:\Users\Estag2\Documents\Caio\OrdemServicoCond_ADO\OrdemServico_ADO\OrdemServico_ADO\bin\Ninject.Web.Mvc.xml
 C:\Users\Estag2\Documents\Caio\OrdemServicoCond_ADO\OrdemServico_ADO\OrdemServico_ADO\bin\EPPlus.dll
 C:\Users\Estag2\Documents\Caio\OrdemServicoCond_ADO\OrdemServico_ADO\OrdemServico_ADO\bin\EPPlus.xml
+C:\Users\Estag2\Documents\Caio\OrdemServicoCond_ADO\OrdemServico_ADO\OrdemServico_ADO\bin\PagedList.dll
+C:\Users\Estag2\Documents\Caio\OrdemServicoCond_ADO\OrdemServico_ADO\OrdemServico_ADO\bin\PagedList.Mvc.dll
+C:\Users\Estag2\Documents\Caio\OrdemServicoCond_ADO\OrdemServico_ADO\OrdemServico_ADO\bin\PagedList.xml
+C:\Users\Estag2\Documents\Caio\OrdemServicoCond_ADO\OrdemServico_ADO\OrdemServico_ADO\bin\PagedList.Mvc.xml

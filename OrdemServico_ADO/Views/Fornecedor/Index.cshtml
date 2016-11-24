@@ -1,5 +1,11 @@
 ﻿@model IList<Entidades.Fornecedor>
 
+@*@model PagedList.IPagedList<Entidades.Fornecedor>
+@using PagedList.Mvc;
+@using PagedList;*@
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
 <br />
 <br />
 
@@ -11,12 +17,11 @@
 
 <div style="margin-top:30px; height:50px;">
 
-    @*@Html.Label("Nome: ")
-    @Html.DropDownList("fltNome", new SelectList(ViewBag.forn, "Id", "Nome"), "Selecione", new { @class = "combobox filtro", style = "width: 130px" })*@
+    <label for="nomeFornecedor">Nome do Fornecedor: </label>
+    <input type="text" name="Nome do Fornecedor" id="nomeFornecedor" style="padding-right: 10px;" />
 
-    @Html.Label("Nome: ")
+    <button style="clear:both;" class="btn btn-info" onclick="AtualizarPagina();">Buscar</button>
 
-    <button style="clear:both;" class="btn btn-info" onclick="Buscar();"> Buscar </button>
 </div>
 
 <br />
@@ -24,43 +29,86 @@
 <div id="listaFornecedores">
 </div>
 
+@*<div id="paginacao">
+
+    Página @Model.PageNumber de @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Buscar", "Fornecedor", new { pagina = page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "#resultadoBusca" }))
+
+</div>*@
 
 @section scripts{
+    <script src="~/Scripts/sweetalert.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="~/Content/sweetalert/sweetalert.css">
+
     <script>
 
-    function Cadastrar() {
-        window.location.href = '@Url.Action("PreencherCadastro", "Fornecedor")';
-    }
-
-    function ExportarExcel() {
-
-        $.ajax({
-            url: '@Url.Action("Exportar", "Fornecedor")',
-            type: "post",
-            dataType: "html",
-            data: {
-                nome: $('#fltNome').val()
-            },
+        $(function () {
+            AtualizarPagina();
         });
-    }
 
-    function Buscar() {
+        function Cadastrar() {
+            window.location.href = '@Url.Action("PreencherCadastro", "Fornecedor")';
+        }
 
-        $('#listaFornecedores').hide();
+        function ExportarExcel() {
+            $.ajax({
+                url: '@Url.Action("Exportar", "Fornecedor")',
+                type: "post",
+                dataType: "html",
+                data: {
+                    nome: $('#nomeFornecedor').val(),
+                },
+            });
+        }
 
-        $.ajax({
-            url: '@Url.Action("Buscar", "Fornecedor")',
-            type: "post",
-            dataType: "html",
-            data: {
-                nome: $('#fltNome').val()
+        function AtualizarPagina() {
+
+            $('#listaFornecedores').hide();
+
+            $.ajax({
+                url: '@Url.Action("Buscar", "Fornecedor")',
+                type: "post",
+                dataType: "html",
+                data: {
+                    nome: $('#nomeFornecedor').val(),
+                },
+                success: function (data) {
+                    $('#listaFornecedores').html(data);
+                    $('#listaFornecedores').show();
+                }
+            });
+        }
+
+        function ConfirmarExclusao(id) {
+            swal({
+                title: "Excluir",
+                text: "Você tem certeza que deseja excluir esse fornecedor?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sim, desejo deletar!",
+                closeOnConfirm: false
             },
-            success: function (data) {
-                $('#listaFornecedores').html(data);
-                $('#listaFornecedores').show();
-            }
-        });
-    }
+
+            function () {
+                $.ajax({
+                    url: '@Url.Action("Excluir", "Fornecedor")',
+                    type: "post",
+                    dataType: "html",
+                    data: {
+                        id: id,
+                    },
+                    success: function (data) {
+                        if (data == "ok") {
+                            swal("Excluído!", "Seu fornecedor foi excluir com sucesso!", "success");
+                            AtualizarPagina();
+                        }
+                    }
+                });
+
+            });
+        }
 
     </script>
 }   
