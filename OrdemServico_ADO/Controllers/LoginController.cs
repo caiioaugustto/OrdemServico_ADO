@@ -1,8 +1,7 @@
 ﻿using Entidades;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using Repository;
+using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Web.Mvc;
 using Uteis;
 
@@ -11,7 +10,7 @@ namespace Controllers
     public class LoginController : Controller
     {
         private LoginRepository loginRepo;
-
+       
         public LoginController(LoginRepository loginRepo)
         {
             this.loginRepo = loginRepo;
@@ -25,7 +24,9 @@ namespace Controllers
 
         public ActionResult Logar(string usuario, string senha)
         {
-            Login login = loginRepo.Buscar(usuario, senha);
+            var senhaCripto = Criptografia.CriptografaMd5(senha);
+
+            Login login = loginRepo.Buscar(usuario, senhaCripto);
 
             if (login.Usuario != null && login.Senha != null)
             {

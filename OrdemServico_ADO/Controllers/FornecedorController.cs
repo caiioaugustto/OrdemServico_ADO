@@ -1,16 +1,12 @@
 ﻿using Entidades;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using System;
+using Repository;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Uteis;
-using PagedList;
-
 
 namespace Controllers
 {
@@ -52,15 +48,21 @@ namespace Controllers
             return RedirectToAction("Index", "Fornecedor");
         }
 
-        public ActionResult Excluir(int id)
+        public ActionResult Inativar(int id)
         {
-            fornRepo.Excluir(id);
+            fornRepo.Inativar(id);
             return Content("ok");
         }
 
-        public ActionResult Buscar(string nome)
+        public ActionResult Ativar(int id)
         {
-            var fornecedores = fornRepo.ListarFiltro(nome);
+            fornRepo.Ativar(id);
+            return Content("ok");
+        }
+
+        public ActionResult Buscar(string nome, bool ativo)
+        {
+            var fornecedores = fornRepo.ListarFiltro(nome, ativo);
 
             return PartialView("partial/_Listar", fornecedores);
 
@@ -70,10 +72,9 @@ namespace Controllers
             //return PartialView("partial/_Listar", fornecedores.ToPagedList(paginaNumero, paginaTamanho));
         }
 
-
-        public ActionResult Exportar(string nome)
+        public ActionResult Exportar(string nome, bool ativo)
         {
-            IEnumerable<Fornecedor> fornecedores = fornRepo.ListarFiltro(nome);
+            IEnumerable<Fornecedor> fornecedores = fornRepo.ListarFiltro(nome, ativo);
 
             MemoryStream stream = new MemoryStream();
 
@@ -88,7 +89,7 @@ namespace Controllers
                 ws.Cells[1, 4].Value = "Descrição";
                 ws.Cells[1, 5].Value = "Email";
                 ws.Cells[1, 6].Value = "Telefone";
-                
+
                 ws.Cells[1, 1, 1, 6].Style.Fill.PatternType = ExcelFillStyle.Solid;
                 ws.Cells[1, 1, 1, 6].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#0000CD"));
                 ws.Cells[1, 1, 1, 6].Style.Font.Bold = true;
@@ -122,7 +123,6 @@ namespace Controllers
 
                 stream = new MemoryStream(xlPackage.GetAsByteArray());
             }
-
             return File(stream, "application/xls", "Fornecedores.xlsx");
         }
     }

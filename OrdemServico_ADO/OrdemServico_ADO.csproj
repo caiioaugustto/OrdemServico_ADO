@@ -212,11 +212,11 @@
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Entidades\Context.cs" />
     <Compile Include="Entidades\Login.cs" />
-    <Compile Include="Entidades\LoginRepository.cs" />
+    <Compile Include="Repository\LoginRepository.cs" />
     <Compile Include="Entidades\OrdemServico.cs" />
     <Compile Include="Entidades\ConnectionContext.cs" />
     <Compile Include="Entidades\Fornecedor.cs" />
-    <Compile Include="Entidades\OrdemServicoRepository.cs" />
+    <Compile Include="Repository\OrdemServicoRepository.cs" />
     <Compile Include="Enum\Descricao.cs" />
     <Compile Include="Enum\Status.cs" />
     <Compile Include="Global.asax.cs">
@@ -224,11 +224,12 @@
     </Compile>
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Entidades\FornecedorRepository.cs" />
+    <Compile Include="Repository\FornecedorRepository.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
+    <Compile Include="Services\GerarOrdemServico.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Uteis\AutorizacaoFilterAttribute.cs" />
     <Compile Include="Uteis\Criptografia.cs" />
@@ -293,9 +294,13 @@
     <Content Include="Views\OrdemServico\Detalhes.cshtml" />
     <Content Include="Views\Fornecedor\partial\_Listar.cshtml" />
     <Content Include="Views\Sweet\Alert.cshtml" />
+    <Content Include="Views\OrdemServico\partial\_Listar.cshtml" />
+    <Content Include="Views\Shared\_ErrorSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Services\Fornecedor\" />
+    <Folder Include="Services\OrdemServico\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -303,6 +308,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

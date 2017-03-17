@@ -3,48 +3,157 @@
 <br />
 <br />
 
+<style>
+    .loading {
+        background: url(~/Content/images/loading.gif);
+    }
+</style>
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
 <button class="btn btn-info" onclick="Cadastrar();">Cadastrar </button>
 
-<br />
+<button class="btn btn-info" style="background-color: #70db70;" onclick="ExportarExcel();">Exportar</button>
+
 <br />
 
-<table class="table table-hover">
-    <thead>
-        <tr style="width:300px;">
-            <th>Nome do Codomínio</th>
-            <th>Descrição do Serviço</th>
-            <th>Nº OS</th>
-            <th>Solicitante</th>
-            <th>Data de Solicitação</th>
-            <th>Prazo</th>
-            <th>Status</th>
-        </tr>
-    </thead>
+<div style="margin-top:30px; height:50px;">
 
-    <tbody>
-        @foreach (var u in Model)
-        {
-            <tr>
-                <td>@u.Fornecedor.Nome</td>
-                <td>@u.DescricaoServico</td>
-                <td>@u.NumeroOrdemServico</td>
-                <td>@u.Solicitante</td>
-                <td>@u.DataSolicitacao.ToString("dd/MM/yyyy")</td>
-                <td>@u.Prazo.ToString("dd/MM/yyyy")</td>
-                <td>@u.Status</td>
-                <td>@Html.ActionLink("Detalhes", "Detalhes", new { id = u.Id })</td>
-                <td>@Html.ActionLink("Excluir", "Excluir", new { id = u.Id })</td>
-                <td>@Html.ActionLink("Desativar", "Desativar", new { id = u.Id })</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <label for="nomeFornecedor">Nome do Fornecedor: </label>
+    <input type="text" name="Nome do Fornecedor" id="nomeFornecedor" style="padding-right: 10px;" />
+
+    <button style="clear:both; background-color: #ff9933;" class="btn btn-info" onclick="atualizarPagina();">Buscar</button>
+
+</div>
+
+<div style="float:left; clear: both; margin: 0 0 10px 0;">
+    <label for="ExibirConteudosInativos" style="height: 30px; line-height: 36px; display: block;">
+        <input type="checkbox" id="exibirConteudosInativos" style="display: block; float: left; margin-right: 10px; height: 30px;" />
+        Exibir Inativos
+    </label>
+</div>
+
+
+<br />
+
+<div id="carregando">
+    <h5 style="width: 100px; margin-left: 385px; margin-top: 65px;">
+        <img src="@Url.Content("~/Content/images/loading.gif")" />
+    </h5>
+</div>
+
+<div id="listaOS">
+
+</div>
 
 
 @section scripts{
+
     <script>
+
+        $(function () {
+            atualizarPagina();
+
+            $('#exibirConteudosInativos').click(function () {
+                atualizarPagina();
+            });
+        });
+
         function Cadastrar() {
             window.location.href = '@Url.Action("PreencherOrdemServico", "OrdemServico")';
         }
+
+        function ExportarExcel() {
+            $.ajax({
+                url: '@Url.Action("Exportar", "OrdemServico")',
+                type: "post",
+                dataType: "html",
+                data: {
+                    nome: $('#nomeFornecedor').val(),
+                },
+            });
+        }
+
+        function atualizarPagina() {
+
+            $('#listaOS').hide();
+            $('#carregando').show();
+
+            $.ajax({
+                url: '@Url.Action("Buscar", "OrdemServico")',
+                type: "post",
+                dataType: "html",
+                data: {
+                    nome: $('#nomeFornecedor').val(),
+                    ativo: $('#exibirConteudosInativos').prop('checked')
+                },
+                success: function (data) {
+                    $('#listaOS').html(data);
+                    $('#carregando').hide();
+                    $('#listaOS').show();
+                }
+            });
+        }
+
+        function confirmarInativacao(id) {
+            swal({
+                title: "Inativar",
+                text: "Você tem certeza que deseja inativar esse fornecedor?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sim, desejo inativar",
+                closeOnConfirm: false
+            },
+
+            function () {
+                $.ajax({
+                    url: '@Url.Action("Inativar", "OrdemServico")',
+                    type: "post",
+                    dataType: "html",
+                    data: {
+                        id: id,
+                    },
+                    success: function (data) {
+                        if (data == "ok") {
+                            swal("Inativado!", "A Ordem de Serviço foi inativado com sucesso!", "success");
+                            atualizarPagina();
+                        }
+                    }
+                });
+
+            });
+        }
+
+        function confirmarAtivacao(id) {
+            swal({
+                title: "Ativar",
+                text: "Você tem certeza que deseja deixar essa Ordem de Serviço como Ativo?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sim, desejo Ativar",
+                closeOnConfirm: false
+            },
+
+            function () {
+                $.ajax({
+                    url: '@Url.Action("Ativar", "OrdemServico")',
+                    type: "post",
+                    dataType: "html",
+                    data: {
+                        id: id,
+                    },
+                    success: function (data) {
+                        if (data == "ok") {
+                            swal("Ativo!", "A Ordem de Serviço foi Ativada para uso com sucesso!", "success");
+                            atualizarPagina();
+                        }
+                    }
+                });
+
+            });
+        }
+
     </script>
 }   

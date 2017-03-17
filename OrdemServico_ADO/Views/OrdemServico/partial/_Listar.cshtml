@@ -1,0 +1,33 @@
+﻿@model IList<Entidades.OrdemServico>
+
+<table class="table table-hover">
+    <thead>
+        <tr style="width:300px;">
+            <th>Nome do Codomínio</th>
+            <th>Descrição do Serviço</th>
+            <th>Nº OS</th>
+            <th>Solicitante</th>
+            <th>Data de Solicitação</th>
+            <th>Prazo</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.Fornecedor.Nome</td>
+                <td>@u.DescricaoServico</td>
+                <td>@u.NumeroOrdemServico</td>
+                <td>@u.Solicitante</td>
+                <td>@u.DataSolicitacao.ToString("dd/MM/yyyy")</td>
+                <td>@u.Prazo.ToString("dd/MM/yyyy")</td>
+                <td>@u.Status</td>
+                <td>@Html.ActionLink("Detalhes", "Detalhes", new { id = u.Id }</td>
+                <td>@Html.ActionLink("Inativar", "Inativar", new { id = u.Id })</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -4,6 +4,8 @@
 {
     <br />
 
+    @Html.Partial("_ErrorSummary")
+
     @Html.LabelFor(m => m.IdFornecedor, "Nome do Fornecedor*")
     @Html.DropDownListFor(m => m.IdFornecedor,
             new SelectList(ViewBag.Fornecedor, "Id", "Nome"), "Selecione",
@@ -12,9 +14,13 @@
 
     <br />
 
-    @Html.LabelFor(a => a.NumeroOrdemServico, "Nº OS*")
-    @Html.TextBoxFor(a => a.NumeroOrdemServico, new { @class = "form-control" })
-    @Html.ValidationMessageFor(a => a.NumeroOrdemServico)
+    @Html.LabelFor(m => m.NumeroOrdemServico, "Nº Ordem de Serviço*")
+    <select class="form-control">
+        @{
+            <option>@ViewBag.NumeroOS</option>
+        }
+    @Html.ValidationMessageFor(m => m.NumeroOrdemServico)
+    </select>
 
     <br />
 

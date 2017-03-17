@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entidades;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -6,10 +7,12 @@ using System.Linq;
 using System.Web;
 using Uteis;
 
-namespace Entidades
+namespace Repository
 {
     public class LoginRepository
     {
+        string connectionString = ConnectionContext.Connection();
+
         private Context context;
 
         public LoginRepository(Context context)
@@ -17,20 +20,8 @@ namespace Entidades
             this.context = context;
         }
 
-        //public Login Buscar(string usuario, string senha)
-        //{
-        //    string senhaCriptografada = Criptografia.CriptografaMd5(senha);
-        //    var logar = context.Login.Where(a => a.Usuario == usuario && a.Senha == senhaCriptografada).FirstOrDefault();
-        //    return logar;
-
-        //}
-
-        string connectionString = ConnectionContext.Connection();
-
         public Login Buscar(string usuario, string senha)
         {
-            string senhaCriptografada = Criptografia.CriptografaMd5(senha);
-
             using (SqlConnection connSql = new SqlConnection(connectionString))
             {
                 connSql.Open();
@@ -38,7 +29,7 @@ namespace Entidades
                 SqlCommand cmdSql = new SqlCommand("select Login.Id, Login.Usuario, Login.Senha from Login where Usuario = @usuario and Senha = @senhaCriptografada;", connSql);
 
                 cmdSql.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario;
-                cmdSql.Parameters.Add("@senhaCriptografada", SqlDbType.VarChar).Value = senhaCriptografada;
+                cmdSql.Parameters.Add("@senhaCriptografada", SqlDbType.VarChar).Value = senha;
 
                 Login autenticacao = new Login();
 

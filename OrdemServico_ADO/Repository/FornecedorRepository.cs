@@ -7,7 +7,7 @@ using System.Linq;
 using System.Transactions;
 using System.Web;
 
-namespace Entidades
+namespace Repository
 {
     public class FornecedorRepository
     {
@@ -47,41 +47,7 @@ namespace Entidades
             }
         }
 
-        //public List<Fornecedor> Listar()
-        //{
-        //    using (SqlConnection connSql = new SqlConnection(connectionString))
-        //    {
-        //        connSql.Open();
-
-        //        SqlCommand cmdSql = new SqlCommand("Select Fornecedor.Id, Fornecedor.Nome, Fornecedor.Telefone, Fornecedor.NomeResponsavel, Fornecedor.Email, Fornecedor.NumeroFornecedor, " +
-        //        "Fornecedor.Descricao From Fornecedor order by Fornecedor.Nome", connSql);
-
-        //        List<Fornecedor> listarFornecedores = new List<Fornecedor>();
-
-        //        using (SqlDataReader dr = cmdSql.ExecuteReader())
-        //        {
-        //            while (dr.Read())
-        //            {
-        //                var forn = new Fornecedor();
-
-        //                forn.Id = Convert.ToInt16(dr["Id"]);
-        //                forn.Nome = dr["Nome"].ToString();
-        //                forn.Telefone = dr["Telefone"].ToString();
-        //                forn.NomeResponsavel = dr["NomeResponsavel"].ToString();
-        //                forn.Email = dr["Email"].ToString();
-        //                forn.Descricao = dr["Descricao"].ToString();
-        //                forn.NumeroFornecedor = Convert.ToInt32(dr["NumeroFornecedor"]);
-
-        //                listarFornecedores.Add(forn);
-        //            }
-        //        }
-        //        connSql.Close();
-
-        //        return listarFornecedores;
-        //    }
-        //}
-
-        public void Excluir(int id)
+        public void Inativar(int id)
         {
             using (TransactionScope scope = new TransactionScope())
             {
@@ -93,10 +59,27 @@ namespace Entidades
 
                     cmdSql.Parameters.Add("@Id", SqlDbType.Int).Value = id;
 
-                    cmdSql.CommandText = "delete from Ordem where IdFornecedor = @id";
+                    cmdSql.CommandText = "update Fornecedor set Ativo = 0 where Id = @id";
                     cmdSql.ExecuteNonQuery();
+                }
+                
+                scope.Complete();
+            }
+        }
 
-                    cmdSql.CommandText = "delete from Fornecedor where Id = @id ";
+        public void Ativar(int id)
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                using (SqlConnection connSql = new SqlConnection(connectionString))
+                {
+                    connSql.Open();
+
+                    SqlCommand cmdSql = connSql.CreateCommand();
+
+                    cmdSql.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+
+                    cmdSql.CommandText = "update Fornecedor set Ativo = 1 where Id = @id";
                     cmdSql.ExecuteNonQuery();
                 }
 
@@ -169,7 +152,7 @@ namespace Entidades
             }
         }
 
-        public IList<Fornecedor> ListarFiltro(string nome)
+        public IList<Fornecedor> ListarNomeId()
         {
             using (SqlConnection connSql = new SqlConnection(connectionString))
             {
@@ -177,18 +160,54 @@ namespace Entidades
 
                 SqlCommand cmdSql = new SqlCommand();
 
+                cmdSql = new SqlCommand("select distinct Fornecedor.Nome, Fornecedor.Id from Fornecedor ", connSql);
+
+                List<Fornecedor> listarFornecedores = new List<Fornecedor>();
+
+                using (SqlDataReader dr = cmdSql.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        var forn = new Fornecedor();
+
+                        forn.Id = Convert.ToInt16(dr["Id"]);
+                        forn.Nome = dr["Nome"].ToString();
+
+                        listarFornecedores.Add(forn);
+                    }
+                }
+                connSql.Close();
+
+                return listarFornecedores;
+            }
+        }
+
+        public IList<Fornecedor> ListarFiltro(string nome, bool ativo)
+        {
+            List<Fornecedor> listarFornecedores = new List<Fornecedor>();
+
+            using (SqlConnection connSql = new SqlConnection(connectionString))
+            {
+                connSql.Open();
+
+                SqlCommand cmdSql = new SqlCommand();
+
+                var bitAtivo = 0;
+
+                if (!ativo) // Ativo
+                    bitAtivo = 1;
+                
                 if (nome == "")
-                    cmdSql = new SqlCommand("select * from Fornecedor", connSql);
+                {
+                    cmdSql = new SqlCommand("select * from Fornecedor where Ativo = " + bitAtivo, connSql);
+                }
 
                 else if (nome != "")
                 {
-                    cmdSql = new SqlCommand("Select Fornecedor.Id, Fornecedor.Nome, Fornecedor.Telefone, Fornecedor.NomeResponsavel, Fornecedor.Email, Fornecedor.NumeroFornecedor, " +
-                 "Fornecedor.Descricao From Fornecedor where Fornecedor.Nome like @nome order by Fornecedor.Nome", connSql);
-
                     cmdSql.Parameters.Add("@Nome", SqlDbType.VarChar, 50).Value = "%" + nome + "%";
-                }
 
-                List<Fornecedor> listarFornecedores = new List<Fornecedor>();
+                    cmdSql = new SqlCommand("Select * from Fornecedor where Nome like '%@Nome%' and Ativo = " + bitAtivo, connSql);
+                }
 
                 using (SqlDataReader dr = cmdSql.ExecuteReader())
                 {
@@ -203,6 +222,7 @@ namespace Entidades
                         forn.Email = dr["Email"].ToString();
                         forn.Descricao = dr["Descricao"].ToString();
                         forn.NumeroFornecedor = Convert.ToInt32(dr["NumeroFornecedor"]);
+                        forn.Ativo = Convert.ToBoolean(dr["Ativo"]);
 
                         listarFornecedores.Add(forn);
                     }

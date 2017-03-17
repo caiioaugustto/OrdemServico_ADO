@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Entidades;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
+using System.Transactions;
 
-namespace Entidades
+namespace Repository
 {
     public class OrdemServicoRepository
     {
@@ -51,6 +51,87 @@ namespace Entidades
             }
         }
 
+
+        //public IList<OrdemServico> Listar()
+        //{
+        //    var result = new List<OrdemServico>();
+
+        //    SqlConnection connection = null;
+        //    SqlCommand command = null;
+        //    SqlDataReader reader = null;
+
+        //    try
+        //    {
+        //        var textCommand = new StringBuilder();
+
+        //        textCommand.AppendLine("SELECT ");
+        //        textCommand.AppendLine("    * from ");
+        //        textCommand.AppendLine("    Ordem ");
+        //        textCommand.AppendLine("    inner join ");
+        //        textCommand.AppendLine("    Fornecedor on Fornecedor Id = IdFornecedor ");
+
+        //        var parameters = new List<SqlParameter>();
+
+        //        using (connection = new SqlConnection(connectionString))
+        //        {
+        //            connection.Open();
+
+        //            command = new SqlCommand(textCommand.ToString(), connection);
+        //            command.CommandTimeout = 3600;
+
+        //            reader = command.ExecuteReader();
+
+        //            if (reader != null && reader.HasRows)
+        //                result = PreencherLista(reader);
+
+        //            connection.Close();
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        if (reader != null) reader.Dispose();
+        //        if (command != null) command.Dispose();
+
+        //        if (connection != null)
+        //        {
+        //            if (connection.State != ConnectionState.Closed) connection.Close();
+        //            connection.Dispose();
+        //        }
+        //    }
+        //    return result;
+        //}
+
+
+        //public List<OrdemServico> PreencherLista(SqlDataReader dr)
+        //{
+        //    var result = new List<OrdemServico>();
+
+        //    while (dr.Read())
+        //    {
+        //        string myDescription = dr["DescricaoServico"].ToString();
+        //        string myStatus = dr["Status"].ToString();
+
+        //        var relatorio = new OrdemServico
+        //        {
+        //            Id = Convert.ToInt16(dr["Id"]),
+        //            DataSolicitacao = Convert.ToDateTime(dr["DataSolicitacao"]),
+        //            NumeroOrdemServico = Convert.ToString(dr["NumeroOrdemServico"]),
+        //            Prazo = Convert.ToDateTime(dr["Prazo"]),
+        //            Solicitante = Convert.ToString(dr["Solicitante"]),
+        //            Status = (Status)Enum.Parse(typeof(Status), myStatus, true),
+        //            DescricaoServico = (Descricao)Enum.Parse(typeof(Descricao), myDescription, true),
+        //            Nucleo = Convert.ToString(dr["Nucleo"]),
+        //            Gerente = Convert.ToString(dr["Gerente"]),
+        //            DataEnvio = Convert.ToDateTime(dr["DataEnvio"]),
+        //            DataLiberacao = Convert.ToDateTime(dr["DataLiberacao"]),
+        //        };
+
+        //        result.Add(relatorio);
+        //    }
+
+        //    return result;
+        //}
+
         public List<OrdemServico> Listar()
         {
             using (SqlConnection connSql = new SqlConnection(connectionString))
@@ -58,10 +139,72 @@ namespace Entidades
                 connSql.Open();
 
                 SqlCommand cmdSql = new SqlCommand("Select Ordem.Id, Ordem.DataSolicitacao, Ordem.NumeroOrdemServico, " +
-                 "Ordem.Solicitante, Ordem.Prazo, Ordem.Status, Ordem.DescricaoServico, Fornecedor.Nome as NomeFornecedor " +
+                 "Ordem.Solicitante, Ordem.Prazo, Ordem.Status, Ordem.DescricaoServico, Ordem.Nucleo, Ordem.DataEnvio, Ordem.DataLiberacao, " +
+                 "Ordem.Gerente, Fornecedor.Nome as NomeFornecedor " +
                      "From Ordem inner join Fornecedor on Fornecedor.Id = IdFornecedor order by Ordem.DataSolicitacao", connSql);
 
                 List<OrdemServico> listarOrdens = new List<OrdemServico>();
+
+                using (SqlDataReader dr = cmdSql.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        var os = new OrdemServico();
+
+                        string myDescription = dr["DescricaoServico"].ToString();
+                        string myStatus = dr["Status"].ToString();
+
+                        os.Id = Convert.ToInt16(dr["Id"]);
+                        os.Fornecedor.Nome = Convert.ToString(dr["NomeFornecedor"]);
+                        os.DataSolicitacao = Convert.ToDateTime(dr["DataSolicitacao"]);
+                        os.NumeroOrdemServico = Convert.ToString(dr["NumeroOrdemServico"]);
+                        os.Prazo = Convert.ToDateTime(dr["Prazo"]);
+                        os.Solicitante = Convert.ToString(dr["Solicitante"]);
+                        os.Status = (Status)Enum.Parse(typeof(Status), myStatus, true);
+                        os.DescricaoServico = (Descricao)Enum.Parse(typeof(Descricao), myDescription, true);
+                        os.Nucleo = Convert.ToString(dr["Nucleo"]);
+                        os.Gerente = Convert.ToString(dr["Gerente"]);
+                        os.DataEnvio = Convert.ToDateTime(dr["DataEnvio"]);
+                        os.DataLiberacao = Convert.ToDateTime(dr["DataLiberacao"]);
+
+                        listarOrdens.Add(os);
+                    }
+                }
+                connSql.Close();
+
+                return listarOrdens;
+            }
+        }
+
+        public List<OrdemServico> ListarFiltro(string nome, bool ativo)
+        {
+            using (SqlConnection connSql = new SqlConnection(connectionString))
+            {
+                List<OrdemServico> ordensServico = new List<OrdemServico>();
+
+                connSql.Open();
+
+                SqlCommand cmdSql = new SqlCommand();
+
+                var bitAtivo = 0;
+
+                if (!ativo) // Ativo
+                    bitAtivo = 1;
+
+                if (nome == "")
+                {
+                    cmdSql = new SqlCommand("select Ordem.Id, Ordem.DataSolicitacao, Ordem.NumeroOrdemServico, Ordem.Solicitante, Ordem.Prazo, Ordem.Status, " + 
+                        "Ordem.DescricaoServico, Ordem.Nucleo, Ordem.DataEnvio, Ordem.Gerente, Fornecedor.Nome as NomeFornecedor " + 
+                            " from Ordem inner join Fornecedor on Fornecedor.Id = IdFornecedor where Ordem.Ativo = " + bitAtivo + " order by Ordem.DataSolicitacao", connSql);
+                }
+                else if (nome != "")
+                {
+                    cmdSql.Parameters.Add("@Nome", SqlDbType.VarChar, 50).Value = nome;
+
+                    cmdSql = new SqlCommand("Select Ordem.Id, Ordem.DataSolicitacao, Ordem.NumeroOrdemServico, Ordem.Solicitante, Ordem.Prazo, Ordem.Status, " + 
+                        " Ordem.DescricaoServico, Ordem.Nucleo, Ordem.DataEnvio, Ordem.Gerente, Fornecedor.Nome as NomeFornecedor " +
+                           " From Ordem inner join Fornecedor on Fornecedor.Id = IdFornecedor where Fornecedor.Nome like'%@Nome%' and Ordem.Ativo = " + bitAtivo + " order by Ordem.DataSolicitacao", connSql);
+                }
 
                 using (SqlDataReader dr = cmdSql.ExecuteReader())
                 {
@@ -81,12 +224,12 @@ namespace Entidades
                         os.Status = (Status)Enum.Parse(typeof(Status), myStatus, true);
                         os.DescricaoServico = (Descricao)Enum.Parse(typeof(Descricao), myDescription, true);
 
-                        listarOrdens.Add(os);
+                        ordensServico.Add(os);
                     }
                 }
                 connSql.Close();
 
-                return listarOrdens;
+                return ordensServico;
             }
         }
 
@@ -136,31 +279,43 @@ namespace Entidades
             }
         }
 
-        public void Exclur(int id)
+        public void Inativar(int id)
         {
-            using (SqlConnection connSql = new SqlConnection(connectionString))
+            using (TransactionScope scope = new TransactionScope())
             {
-                try
+                using (SqlConnection connSql = new SqlConnection(connectionString))
                 {
-                    //Abre a conexão com o Banco
                     connSql.Open();
 
-                    //Query que executará
-                    SqlCommand cmdSql = new SqlCommand("delete from Ordem where Id = @id", connSql);
+                    SqlCommand cmdSql = connSql.CreateCommand();
 
-                    //SqlDbType Inicializa uma nova instância da classe de SqlParameter que usa o nome do parâmetro e o tipo de dados.
                     cmdSql.Parameters.Add("@Id", SqlDbType.Int).Value = id;
 
-                    //Executa a Query
+                    cmdSql.CommandText = "update Ordem set Ativo = 0 where Id = @id";
                     cmdSql.ExecuteNonQuery();
+                }
 
-                    //Encerra a conexão com o Banco
-                    connSql.Close();
-                }
-                catch
+                scope.Complete();
+            }
+        }
+
+        public void Ativar(int id)
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                using (SqlConnection connSql = new SqlConnection(connectionString))
                 {
-                    connSql.Close();
+                    connSql.Open();
+
+                    SqlCommand cmdSql = connSql.CreateCommand();
+
+                    cmdSql.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+
+                    cmdSql.CommandText = "update Ordem set Ativo = 1 where Id = @id";
+                    cmdSql.ExecuteNonQuery();
                 }
+
+                scope.Complete();
             }
         }
 

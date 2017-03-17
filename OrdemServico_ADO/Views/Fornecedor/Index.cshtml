@@ -1,8 +1,14 @@
 ﻿@model IList<Entidades.Fornecedor>
 
 @*@model PagedList.IPagedList<Entidades.Fornecedor>
-@using PagedList.Mvc;
-@using PagedList;*@
+    @using PagedList.Mvc;
+    @using PagedList;*@
+
+<style>
+    .loading {
+        background: url(~/Content/images/loading.gif);
+    }
+</style>
 
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
@@ -11,7 +17,7 @@
 
 <button class="btn btn-info" onclick="Cadastrar();">Cadastrar</button>
 
-<button class="btn btn-info" onclick="ExportarExcel();">Exportar</button>
+<button class="btn btn-info" style="background-color: #70db70;" onclick="ExportarExcel();">Exportar</button>
 
 <br />
 
@@ -20,21 +26,35 @@
     <label for="nomeFornecedor">Nome do Fornecedor: </label>
     <input type="text" name="Nome do Fornecedor" id="nomeFornecedor" style="padding-right: 10px;" />
 
-    <button style="clear:both;" class="btn btn-info" onclick="AtualizarPagina();">Buscar</button>
+    <button style="clear:both; background-color: #ff9933;" class="btn btn-info" onclick="atualizarPagina();">Buscar</button>
 
+</div>
+
+<div style="float:left; clear: both; margin: 0 0 10px 0;">
+    <label for="ExibirConteudosInativos" style="height: 30px; line-height: 36px; display: block;">
+        <input type="checkbox" id="exibirConteudosInativos" style="display: block; float: left; margin-right: 10px; height: 30px;"" />
+        Exibir Inativos
+    </label>
 </div>
 
 <br />
 
+<div id="carregando">
+    <h5 style="width: 100px; margin-left: 385px; margin-top: 65px;">
+        <img src="@Url.Content("~/Content/images/loading.gif")" />
+    </h5>
+</div>
+
 <div id="listaFornecedores">
+
 </div>
 
 @*<div id="paginacao">
 
-    Página @Model.PageNumber de @Model.PageCount
-    @Html.PagedListPager(Model, page => Url.Action("Buscar", "Fornecedor", new { pagina = page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "#resultadoBusca" }))
+        Página @Model.PageNumber de @Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("Buscar", "Fornecedor", new { pagina = page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "#resultadoBusca" }))
 
-</div>*@
+    </div>*@
 
 @section scripts{
     <script src="~/Scripts/sweetalert.min.js"></script>
@@ -44,7 +64,11 @@
     <script>
 
         $(function () {
-            AtualizarPagina();
+            atualizarPagina();
+
+            $('#exibirConteudosInativos').click(function () {
+                atualizarPagina();
+            });
         });
 
         function Cadastrar() {
@@ -62,9 +86,10 @@
             });
         }
 
-        function AtualizarPagina() {
+        function atualizarPagina() {
 
             $('#listaFornecedores').hide();
+            $('#carregando').show();
 
             $.ajax({
                 url: '@Url.Action("Buscar", "Fornecedor")',
@@ -72,28 +97,30 @@
                 dataType: "html",
                 data: {
                     nome: $('#nomeFornecedor').val(),
+                    ativo: $('#exibirConteudosInativos').prop('checked')
                 },
                 success: function (data) {
                     $('#listaFornecedores').html(data);
+                    $('#carregando').hide();
                     $('#listaFornecedores').show();
                 }
             });
         }
 
-        function ConfirmarExclusao(id) {
+        function confirmarInativacao(id) {
             swal({
-                title: "Excluir",
-                text: "Você tem certeza que deseja excluir esse fornecedor?",
+                title: "Inativar",
+                text: "Você tem certeza que deseja inativar esse fornecedor?",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Sim, desejo deletar!",
+                confirmButtonText: "Sim, desejo inativar",
                 closeOnConfirm: false
             },
 
             function () {
                 $.ajax({
-                    url: '@Url.Action("Excluir", "Fornecedor")',
+                    url: '@Url.Action("Inativar", "Fornecedor")',
                     type: "post",
                     dataType: "html",
                     data: {
@@ -101,8 +128,38 @@
                     },
                     success: function (data) {
                         if (data == "ok") {
-                            swal("Excluído!", "Seu fornecedor foi excluir com sucesso!", "success");
-                            AtualizarPagina();
+                            swal("Inativado!", "Seu fornecedor foi inativado com sucesso!", "success");
+                            atualizarPagina();
+                        }
+                    }
+                });
+
+            });
+        }
+
+        function confirmarAtivacao(id) {
+            swal({
+                title: "Ativar",
+                text: "Você tem certeza que deseja deixar esse fornecedor como Ativo?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sim, desejo Ativar",
+                closeOnConfirm: false
+            },
+
+            function () {
+                $.ajax({
+                    url: '@Url.Action("Ativar", "Fornecedor")',
+                    type: "post",
+                    dataType: "html",
+                    data: {
+                        id: id,
+                    },
+                    success: function (data) {
+                        if (data == "ok") {
+                            swal("Ativo!", "Seu fornecedor foi Ativado para uso com sucesso!", "success");
+                            atualizarPagina();
                         }
                     }
                 });
